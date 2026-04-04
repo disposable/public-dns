@@ -13,7 +13,7 @@ on:
             validation_parallelism:
                 description: "Per-VM validation parallelism for shard jobs"
                 required: false
-                default: 5
+                default: 100
                 type: number
             commit_message:
                 description: "Optional custom commit message"
