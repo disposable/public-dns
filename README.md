@@ -23,11 +23,9 @@ Data is refreshed by GitHub Actions:
 
 The workflow:
 
-1. checks out this repo and the `crawler` submodule
-2. generates and validates the probe corpus
-3. refreshes resolver data using that corpus
-4. copies the generated flat exports from `_build/` into `json/` and `txt/`
-5. commits changes if outputs changed
+1. `discover-and-split`: checks out this repo and the `crawler` submodule, generates and validates the probe corpus, discovers candidates, applies historical quarantine, and writes 10 shard inputs
+2. `validate-shards`: runs a 10-job matrix where each VM validates one shard with configurable per-VM validation parallelism
+3. `merge-and-publish`: merges validated shards, materializes generic output files, updates `meta/history.duckdb`, regenerates the README stats section, and commits changes
 
 <!-- GENERATED_STATS_START -->
 ## 30-Day Validation Stats
@@ -75,3 +73,11 @@ uv run resolver-inventory refresh \
 ```
 
 For server-side end-to-end runs without GitHub Actions stages, use `scripts/local-deploy.sh`. It supports per-run overrides such as `--validation-parallelism 12` and `--validate-jobs 10`.
+
+Example:
+
+```bash
+bash scripts/local-deploy.sh \
+  --validation-parallelism 8 \
+  --validate-jobs 4
+```
