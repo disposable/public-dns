@@ -1,6 +1,6 @@
 # Public DNS and DoH resolver data
 
-Published public DNS and DoH resolver datasets, generated automatically from the [`crawler`](./crawler) submodule.
+Published public DNS and DoH resolver datasets, generated automatically from the [`crawler`](https://github.com/disposable/public-dns-crawler) submodule.
 
 This repository is the **data/output repo**.
 The crawler code lives in the submodule; this repo stores the generated assets.
