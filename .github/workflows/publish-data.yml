@@ -1,0 +1,119 @@
+name: Publish public DNS data
+
+on:
+    schedule:
+        - cron: "15 2 * * *"
+    workflow_dispatch:
+        inputs:
+            update_submodule:
+                description: "Update crawler submodule to latest remote commit"
+                required: false
+                default: false
+                type: boolean
+            commit_message:
+                description: "Optional custom commit message"
+                required: false
+                default: ""
+                type: string
+
+permissions:
+    contents: write
+
+concurrency:
+    group: publish-public-dns
+    cancel-in-progress: false
+
+jobs:
+    build-and-publish:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout repo with submodules
+              uses: actions/checkout@v4
+              with:
+                  submodules: recursive
+                  fetch-depth: 0
+
+            - name: Optionally update crawler submodule
+              if: ${{ github.event_name == 'workflow_dispatch' && inputs.update_submodule }}
+              run: |
+                  git submodule update --init --remote --recursive crawler
+                  git status
+
+            - name: Set up Python
+              uses: actions/setup-python@v5
+              with:
+                  python-version: "3.14"
+
+            - name: Set up uv
+              uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78
+
+            - name: Install crawler dependencies
+              working-directory: crawler
+              run: uv sync --group dev
+
+            - name: Prepare output directories
+              run: |
+                  mkdir -p json txt csv probe-corpus
+                  rm -rf json/* txt/* csv/* probe-corpus/*
+
+            - name: Generate probe corpus
+              working-directory: crawler
+              run: >
+                  uv run resolver-inventory generate-probe-corpus
+                  --config configs/probe-corpus.toml
+                  --output ../probe-corpus
+
+            - name: Validate probe corpus
+              working-directory: crawler
+              run: >
+                  uv run resolver-inventory validate-probe-corpus
+                  --config configs/probe-corpus.toml
+                  --input ../probe-corpus/probe-corpus.json
+                  --schema-version 2
+
+            - name: Refresh resolver data using generated probe corpus
+              working-directory: crawler
+              run: >
+                  uv run resolver-inventory refresh
+                  --config configs/default.toml
+                  --probe-corpus ../probe-corpus/probe-corpus.json
+                  --output ../_build
+
+            - name: Copy published assets into repository root
+              run: |
+                  cp -a _build/json/. json/ || true
+                  cp -a _build/txt/. txt/ || true
+                  cp -a _build/csv/. csv/ || true
+
+            - name: Write metadata
+              run: |
+                  mkdir -p meta
+                  {
+                    echo "{"
+                    echo "  \"generated_at\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\","
+                    echo "  \"workflow\": \"${GITHUB_WORKFLOW}\","
+                    echo "  \"run_id\": \"${GITHUB_RUN_ID}\","
+                    echo "  \"sha\": \"${GITHUB_SHA}\""
+                    echo "}"
+                  } > meta/build.json
+
+            - name: Commit and push if changed
+              run: |
+                  git config user.name "github-actions[bot]"
+                  git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+                  git add json txt csv probe-corpus meta crawler
+
+                  if git diff --cached --quiet; then
+                    echo "No changes to commit"
+                    exit 0
+                  fi
+
+                  MSG="${{ inputs.commit_message }}"
+                  if [ -z "$MSG" ]; then
+                    MSG="chore(data): refresh public DNS assets"
+                  fi
+
+                  git commit -m "$MSG"
+                  git push
