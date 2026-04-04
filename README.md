@@ -29,6 +29,17 @@ The workflow:
 4. copies the generated flat exports from `_build/` into `json/` and `txt/`
 5. commits changes if outputs changed
 
+## Upstream sources
+
+Resolver candidates are gathered by the `crawler` submodule from:
+
+- public-dns.info nameserver CSV: <https://public-dns.info/nameservers.csv>
+- curl wiki DoH list: <https://raw.githubusercontent.com/wiki/curl/curl/DNS-over-HTTPS.md>
+- AdGuard DNS providers list: <https://raw.githubusercontent.com/AdguardTeam/KnowledgeBaseDNS/master/docs/general/dns-providers.md>
+- local manual seeds:
+  - `crawler/configs/manual-dns.txt`
+  - `crawler/configs/manual-doh.toml`
+
 ## Usage
 
 Consume the generated files directly from this repository.
@@ -55,3 +66,4 @@ uv run resolver-inventory refresh \
   --config configs/default.toml \
   --probe-corpus ../probe-corpus/probe-corpus.json \
   --output ../_build
+```
