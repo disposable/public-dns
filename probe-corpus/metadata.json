@@ -1,0 +1,33 @@
+{
+  "schema_version": 2,
+  "corpus_version": "dev",
+  "generated_at": "2026-04-04T02:07:44Z",
+  "generator_version": "0.1.0",
+  "sources_used": [
+    "https://www.iana.org/domains/root/servers",
+    "https://www.iana.org/domains/root/db/de.html",
+    "https://www.iana.org/domains/root/db/uk.html",
+    "https://www.iana.org/domains/root/db/jp.html"
+  ],
+  "candidate_counts": {
+    "positive_exact": 12,
+    "positive_consensus": 3,
+    "negative_generated": 4
+  },
+  "accepted_counts": {
+    "positive_exact": 10,
+    "positive_consensus": 3,
+    "negative_generated": 4
+  },
+  "rejected_counts": {
+    "positive_exact": 2
+  },
+  "rejected_by_reason": {
+    "exact_rrset_mismatch": 2
+  },
+  "baseline_resolvers_used": [
+    "1.1.1.1",
+    "9.9.9.9",
+    "8.8.8.8"
+  ]
+}
