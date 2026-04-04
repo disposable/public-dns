@@ -10,6 +10,11 @@ on:
                 required: false
                 default: false
                 type: boolean
+            validation_parallelism:
+                description: "Per-VM validation parallelism for shard jobs"
+                required: false
+                default: 5
+                type: number
             commit_message:
                 description: "Optional custom commit message"
                 required: false
@@ -24,7 +29,7 @@ concurrency:
     cancel-in-progress: false
 
 jobs:
-    build-and-publish:
+    discover-and-split:
         runs-on: ubuntu-latest
 
         steps:
@@ -52,43 +57,191 @@ jobs:
               working-directory: crawler
               run: uv sync --group dev
 
-            - name: Prepare output directories
+            - name: Prepare stage directories
               run: |
-                  mkdir -p json txt probe-corpus
-                  rm -rf json/* txt/* probe-corpus/*
+                  mkdir -p stage-inputs/probe-corpus
+                  mkdir -p stage-inputs/discovery/chunks
+                  mkdir -p stage-inputs/meta
+                  rm -rf stage-inputs/probe-corpus/* stage-inputs/discovery/* stage-inputs/meta/*
+                  mkdir -p stage-inputs/discovery/chunks
 
             - name: Generate probe corpus
               working-directory: crawler
               run: >
                   uv run resolver-inventory generate-probe-corpus
                   --config configs/probe-corpus.toml
-                  --output ../probe-corpus
+                  --output ../stage-inputs/probe-corpus
 
             - name: Validate probe corpus
               working-directory: crawler
               run: >
                   uv run resolver-inventory validate-probe-corpus
                   --config configs/probe-corpus.toml
-                  --input ../probe-corpus/probe-corpus.json
+                  --input ../stage-inputs/probe-corpus/probe-corpus.json
                   --schema-version 2
 
-            - name: Refresh resolver data using generated probe corpus
-              id: refresh
+            - name: Discover candidates
+              id: discover
               working-directory: crawler
               run: >
-                  uv run resolver-inventory refresh
+                  uv run resolver-inventory discover
                   --config configs/default.toml
-                  --probe-corpus ../probe-corpus/probe-corpus.json
+                  --output ../stage-inputs/discovery/candidates.json
+                  --filtered-output ../stage-inputs/discovery/filtered.json
+
+            - name: Split candidates into shards
+              id: split
+              working-directory: crawler
+              run: >
+                  uv run resolver-inventory split-candidates
+                  --input ../stage-inputs/discovery/candidates.json
+                  --output-dir ../stage-inputs/discovery/chunks
+                  --shards 10
+
+            - name: Write crawler SHA
+              run: git -C crawler rev-parse HEAD > stage-inputs/meta/crawler-sha.txt
+
+            - name: Report discovery results
+              run: |
+                  echo "Candidates discovered: ${{ steps.discover.outputs.candidates_total }}"
+                  echo "Filtered before validation: ${{ steps.discover.outputs.filtered_total }}"
+                  echo "Shard count: ${{ steps.split.outputs.shards }}"
+                  echo "Discovery manifest: ${{ steps.split.outputs.manifest_path }}"
+
+            - name: Upload stage inputs
+              uses: actions/upload-artifact@v4
+              with:
+                  name: crawler-stage-inputs
+                  path: stage-inputs/
+
+    validate-shards:
+        runs-on: ubuntu-latest
+        needs: [discover-and-split]
+        strategy:
+            fail-fast: false
+            matrix:
+                shard: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+        steps:
+            - name: Checkout repo with submodules
+              uses: actions/checkout@v4
+              with:
+                  submodules: recursive
+                  fetch-depth: 0
+
+            - name: Download stage inputs
+              uses: actions/download-artifact@v4
+              with:
+                  name: crawler-stage-inputs
+                  path: stage-inputs
+
+            - name: Pin crawler submodule to staged SHA
+              run: |
+                  SHA="$(cat stage-inputs/meta/crawler-sha.txt)"
+                  git -C crawler fetch origin "$SHA"
+                  git -C crawler checkout "$SHA"
+
+            - name: Set up Python
+              uses: actions/setup-python@v5
+              with:
+                  python-version: "3.14"
+
+            - name: Set up uv
+              uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78
+
+            - name: Install crawler dependencies
+              working-directory: crawler
+              run: uv sync --group dev
+
+            - name: Validate shard
+              id: validate
+              env:
+                  VALIDATION_PARALLELISM: ${{ github.event_name == 'workflow_dispatch' && inputs.validation_parallelism || 5 }}
+              run: |
+                  SHARD="$(printf '%02d' "${{ matrix.shard }}")"
+                  mkdir -p validated-shards
+                  cd crawler
+                  uv run resolver-inventory validate \
+                    --config configs/default.toml \
+                    --input ../stage-inputs/discovery/chunks/chunk-"${SHARD}".json \
+                    --probe-corpus ../stage-inputs/probe-corpus/probe-corpus.json \
+                    --validation-parallelism "${VALIDATION_PARALLELISM}" \
+                    --output ../validated-shards/shard-"${SHARD}".json
+
+            - name: Upload validated shard
+              uses: actions/upload-artifact@v4
+              with:
+                  name: validated-shard-${{ matrix.shard }}
+                  path: validated-shards/
+
+    merge-and-publish:
+        runs-on: ubuntu-latest
+        needs: [discover-and-split, validate-shards]
+
+        steps:
+            - name: Checkout repo with submodules
+              uses: actions/checkout@v4
+              with:
+                  submodules: recursive
+                  fetch-depth: 0
+
+            - name: Download stage inputs
+              uses: actions/download-artifact@v4
+              with:
+                  name: crawler-stage-inputs
+                  path: stage-inputs
+
+            - name: Download validated shards
+              uses: actions/download-artifact@v4
+              with:
+                  pattern: validated-shard-*
+                  path: validated-shards
+                  merge-multiple: true
+
+            - name: Pin crawler submodule to staged SHA
+              run: |
+                  SHA="$(cat stage-inputs/meta/crawler-sha.txt)"
+                  git -C crawler fetch origin "$SHA"
+                  git -C crawler checkout "$SHA"
+
+            - name: Set up Python
+              uses: actions/setup-python@v5
+              with:
+                  python-version: "3.14"
+
+            - name: Set up uv
+              uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78
+
+            - name: Install crawler dependencies
+              working-directory: crawler
+              run: uv sync --group dev
+
+            - name: Prepare output directories
+              run: |
+                  mkdir -p _build json txt probe-corpus
+                  rm -rf _build/* json/* txt/* probe-corpus/*
+
+            - name: Materialize final outputs
+              id: materialize
+              working-directory: crawler
+              run: >
+                  uv run resolver-inventory materialize-results
+                  --config configs/default.toml
+                  --inputs-glob "../validated-shards/*.json"
+                  --filtered-input ../stage-inputs/discovery/filtered.json
                   --output ../_build
 
-            - name: Report refresh results
+            - name: Copy probe corpus artifacts
+              run: cp -R stage-inputs/probe-corpus/. probe-corpus/
+
+            - name: Report merge results
               run: |
-                  echo "Candidates discovered: ${{ steps.refresh.outputs.candidates_total }}"
-                  echo "Accepted: ${{ steps.refresh.outputs.results_accepted }}"
-                  echo "Candidate: ${{ steps.refresh.outputs.results_candidate }}"
-                  echo "Rejected: ${{ steps.refresh.outputs.results_rejected }}"
-                  echo "Exported files: ${{ steps.refresh.outputs.exported_files }}"
-                  echo "Output directory: ${{ steps.refresh.outputs.output_dir }}"
+                  echo "Accepted: ${{ steps.materialize.outputs.results_accepted }}"
+                  echo "Candidate: ${{ steps.materialize.outputs.results_candidate }}"
+                  echo "Rejected: ${{ steps.materialize.outputs.results_rejected }}"
+                  echo "Filtered: ${{ steps.materialize.outputs.filtered_total }}"
+                  echo "Validated shards: ${{ steps.materialize.outputs.validated_shards }}"
+                  echo "Output directory: ${{ steps.materialize.outputs.output_dir }}"
 
             - name: Copy published assets into repository root
               run: |
