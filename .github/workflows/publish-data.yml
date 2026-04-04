@@ -73,12 +73,22 @@ jobs:
                   --schema-version 2
 
             - name: Refresh resolver data using generated probe corpus
+              id: refresh
               working-directory: crawler
               run: >
                   uv run resolver-inventory refresh
                   --config configs/default.toml
                   --probe-corpus ../probe-corpus/probe-corpus.json
                   --output ../_build
+
+            - name: Report refresh results
+              run: |
+                  echo "Candidates discovered: ${{ steps.refresh.outputs.candidates_total }}"
+                  echo "Accepted: ${{ steps.refresh.outputs.results_accepted }}"
+                  echo "Candidate: ${{ steps.refresh.outputs.results_candidate }}"
+                  echo "Rejected: ${{ steps.refresh.outputs.results_rejected }}"
+                  echo "Exported files: ${{ steps.refresh.outputs.exported_files }}"
+                  echo "Output directory: ${{ steps.refresh.outputs.output_dir }}"
 
             - name: Copy published assets into repository root
               run: |
