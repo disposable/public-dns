@@ -48,7 +48,7 @@ jobs:
             - name: Set up Python
               uses: actions/setup-python@v5
               with:
-                  python-version: "3.14"
+                  python-version: "3.13"
 
             - name: Set up uv
               uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78
@@ -87,6 +87,17 @@ jobs:
                   uv run resolver-inventory discover
                   --config configs/default.toml
                   --output ../stage-inputs/discovery/candidates.json
+                  --filtered-output ../stage-inputs/discovery/filtered.json
+
+            - name: Apply historical DNS quarantine
+              working-directory: crawler
+              run: >
+                  uv run python scripts/apply_history_quarantine.py
+                  --history-db ../meta/history.duckdb
+                  --run-date "$(date -u +%F)"
+                  --candidates-input ../stage-inputs/discovery/candidates.json
+                  --filtered-input ../stage-inputs/discovery/filtered.json
+                  --candidates-output ../stage-inputs/discovery/candidates.json
                   --filtered-output ../stage-inputs/discovery/filtered.json
 
             - name: Split candidates into shards
@@ -144,7 +155,7 @@ jobs:
             - name: Set up Python
               uses: actions/setup-python@v5
               with:
-                  python-version: "3.14"
+                  python-version: "3.13"
 
             - name: Set up uv
               uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78
@@ -207,7 +218,7 @@ jobs:
             - name: Set up Python
               uses: actions/setup-python@v5
               with:
-                  python-version: "3.14"
+                  python-version: "3.13"
 
             - name: Set up uv
               uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78
@@ -267,12 +278,29 @@ jobs:
                     echo "}"
                   } > meta/build.json
 
+            - name: Update history database
+              working-directory: crawler
+              run: >
+                  uv run python scripts/update_history.py
+                  --history-db ../meta/history.duckdb
+                  --validated-input ../_build/validated.json
+                  --filtered-input ../_build/filtered.json
+                  --meta-build ../meta/build.json
+                  --crawler-sha-file ../stage-inputs/meta/crawler-sha.txt
+
+            - name: Generate README statistics
+              working-directory: crawler
+              run: >
+                  uv run python scripts/generate_stats_report.py
+                  --history-db ../meta/history.duckdb
+                  --readme ../README.md
+
             - name: Commit and push if changed
               run: |
                   git config user.name "github-actions[bot]"
                   git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-                  git add json txt probe-corpus meta crawler
+                  git add README.md json txt probe-corpus meta crawler
 
                   if git diff --cached --quiet; then
                     echo "No changes to commit"
