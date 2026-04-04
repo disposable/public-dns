@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-04-04T13:57:51Z",
-  "workflow": "local-deploy",
-  "run_id": "local-sonar-20260404T135751Z",
-  "sha": "a0d491a198f2b0455c21cff68afcbeff431d93e1"
+  "generated_at": "2026-04-04T14:22:37Z",
+  "workflow": "Publish public DNS data",
+  "run_id": "23980623049",
+  "sha": "c85d9cc1b799b0e92a03ee8672fa71c4fdee3ebf"
 }
