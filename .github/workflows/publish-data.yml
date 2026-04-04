@@ -1,5 +1,6 @@
 name: Publish public DNS data
 
+# Action major versions below were bumped for Node 24 compatibility.
 on:
     schedule:
         - cron: "15 2 * * *"
@@ -34,7 +35,7 @@ jobs:
 
         steps:
             - name: Checkout repo with submodules
-              uses: actions/checkout@v4
+              uses: actions/checkout@v6
               with:
                   submodules: recursive
                   fetch-depth: 0
@@ -46,7 +47,7 @@ jobs:
                   git status
 
             - name: Set up Python
-              uses: actions/setup-python@v5
+              uses: actions/setup-python@v6
               with:
                   python-version: "3.13"
 
@@ -120,7 +121,7 @@ jobs:
                   echo "Discovery manifest: ${{ steps.split.outputs.manifest_path }}"
 
             - name: Upload stage inputs
-              uses: actions/upload-artifact@v4
+              uses: actions/upload-artifact@v6
               with:
                   name: crawler-stage-inputs
                   path: stage-inputs/
@@ -135,13 +136,13 @@ jobs:
 
         steps:
             - name: Checkout repo with submodules
-              uses: actions/checkout@v4
+              uses: actions/checkout@v6
               with:
                   submodules: recursive
                   fetch-depth: 0
 
             - name: Download stage inputs
-              uses: actions/download-artifact@v4
+              uses: actions/download-artifact@v7
               with:
                   name: crawler-stage-inputs
                   path: stage-inputs
@@ -153,7 +154,7 @@ jobs:
                   git -C crawler checkout "$SHA"
 
             - name: Set up Python
-              uses: actions/setup-python@v5
+              uses: actions/setup-python@v6
               with:
                   python-version: "3.13"
 
@@ -180,7 +181,7 @@ jobs:
                     --output ../validated-shards/shard-"${SHARD}".json
 
             - name: Upload validated shard
-              uses: actions/upload-artifact@v4
+              uses: actions/upload-artifact@v6
               with:
                   name: validated-shard-${{ matrix.shard }}
                   path: validated-shards/
@@ -191,19 +192,19 @@ jobs:
 
         steps:
             - name: Checkout repo with submodules
-              uses: actions/checkout@v4
+              uses: actions/checkout@v6
               with:
                   submodules: recursive
                   fetch-depth: 0
 
             - name: Download stage inputs
-              uses: actions/download-artifact@v4
+              uses: actions/download-artifact@v7
               with:
                   name: crawler-stage-inputs
                   path: stage-inputs
 
             - name: Download validated shards
-              uses: actions/download-artifact@v4
+              uses: actions/download-artifact@v7
               with:
                   pattern: validated-shard-*
                   path: validated-shards
@@ -216,7 +217,7 @@ jobs:
                   git -C crawler checkout "$SHA"
 
             - name: Set up Python
-              uses: actions/setup-python@v5
+              uses: actions/setup-python@v6
               with:
                   python-version: "3.13"
 
