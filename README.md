@@ -74,4 +74,4 @@ uv run resolver-inventory refresh \
   --output ../_build
 ```
 
-For server-side end-to-end runs without GitHub Actions stages, use [scripts/local-deploy.sh](/home/stefan/github/public-dns/scripts/local-deploy.sh). It supports per-run overrides such as `--validation-parallelism 12` and `--validate-jobs 10`.
+For server-side end-to-end runs without GitHub Actions stages, use `scripts/local-deploy.sh`. It supports per-run overrides such as `--validation-parallelism 12` and `--validate-jobs 10`.
