@@ -66,6 +66,19 @@ Consume the generated files directly from this repository.
 
 For reproducible use, pin to a specific commit instead of following the latest repository state.
 
+## Exported files
+
+- `json/accepted.json` - resolvers that passed validation strongly enough to be accepted for normal use
+- `json/candidate.json` - resolvers that are reachable but did not score high enough for accepted status
+- `json/rejected.json` - resolvers that failed validation; only failed probes are retained, and `all_probes_failed` is set when every probe failed
+- `json/filtered.json` - candidates removed before validation, for example duplicates, invalid endpoints, low source reliability, or historical quarantine
+- `txt/resolvers.txt` - accepted plain DNS resolvers only, as `host:port`
+- `txt/resolvers-doh.txt` - accepted DoH resolvers only, as HTTPS endpoint URLs
+- `txt/dnsdist.conf` - dnsdist backend config for non-rejected resolvers, including candidate backends that dnsdist can still health-check
+- `txt/unbound-forward.conf` - accepted plain DNS forward-zone config for Unbound
+
+Large JSON files may be split into `*.part-XXXX.json` files to stay below repository limits. When that happens, the part files together replace the unsplit file.
+
 ## Local reproduction
 
 ```bash
