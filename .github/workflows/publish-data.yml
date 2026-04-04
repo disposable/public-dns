@@ -54,8 +54,8 @@ jobs:
 
             - name: Prepare output directories
               run: |
-                  mkdir -p json txt csv probe-corpus
-                  rm -rf json/* txt/* csv/* probe-corpus/*
+                  mkdir -p json txt probe-corpus
+                  rm -rf json/* txt/* probe-corpus/*
 
             - name: Generate probe corpus
               working-directory: crawler
@@ -82,9 +82,15 @@ jobs:
 
             - name: Copy published assets into repository root
               run: |
-                  cp -a _build/json/. json/ || true
-                  cp -a _build/txt/. txt/ || true
-                  cp -a _build/csv/. csv/ || true
+                  shopt -s nullglob
+
+                  for file in _build/*.json; do
+                    cp "$file" json/
+                  done
+
+                  for file in _build/*.txt _build/*.conf; do
+                    cp "$file" txt/
+                  done
 
             - name: Write metadata
               run: |
@@ -103,7 +109,7 @@ jobs:
                   git config user.name "github-actions[bot]"
                   git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-                  git add json txt csv probe-corpus meta crawler
+                  git add json txt probe-corpus meta crawler
 
                   if git diff --cached --quiet; then
                     echo "No changes to commit"
