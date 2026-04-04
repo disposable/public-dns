@@ -13,6 +13,7 @@ Options:
   --validation-parallelism N      Per-shard validator parallelism override (default: 5)
   --shards N                      Number of candidate shards to create (default: 10)
   --validate-jobs N               Number of shard validation jobs to run concurrently (default: shard count)
+  --split-json-max-bytes N        Split JSON outputs into .part files up to N bytes (default: 100000000, set 0 to disable)
   --work-dir PATH                 Working directory for temporary stage artifacts (default: .local-deploy)
   --commit                        Commit generated changes at the end
   --push                          Push after committing
@@ -23,6 +24,7 @@ Environment overrides:
   VALIDATION_PARALLELISM
   SHARDS
   VALIDATE_JOBS
+  SPLIT_JSON_MAX_BYTES
   LOCAL_DEPLOY_WORK_DIR
   LOCAL_DEPLOY_COMMIT
   LOCAL_DEPLOY_PUSH
@@ -46,6 +48,7 @@ WORK_DIR="${LOCAL_DEPLOY_WORK_DIR:-$ROOT_DIR/.local-deploy}"
 VALIDATION_PARALLELISM="${VALIDATION_PARALLELISM:-5}"
 SHARDS="${SHARDS:-10}"
 VALIDATE_JOBS="${VALIDATE_JOBS:-}"
+SPLIT_JSON_MAX_BYTES="${SPLIT_JSON_MAX_BYTES:-100000000}"
 COMMIT_CHANGES="${LOCAL_DEPLOY_COMMIT:-0}"
 PUSH_CHANGES="${LOCAL_DEPLOY_PUSH:-0}"
 COMMIT_MESSAGE="${LOCAL_DEPLOY_COMMIT_MESSAGE:-chore(data): refresh public DNS assets}"
@@ -67,6 +70,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     --validate-jobs)
       VALIDATE_JOBS="${2:?missing value for --validate-jobs}"
+      shift 2
+      ;;
+    --split-json-max-bytes)
+      SPLIT_JSON_MAX_BYTES="${2:?missing value for --split-json-max-bytes}"
       shift 2
       ;;
     --work-dir)
@@ -102,6 +109,7 @@ fi
 [[ "$VALIDATION_PARALLELISM" =~ ^[0-9]+$ ]] || die "--validation-parallelism must be numeric"
 [[ "$SHARDS" =~ ^[0-9]+$ ]] || die "--shards must be numeric"
 [[ "$VALIDATE_JOBS" =~ ^[0-9]+$ ]] || die "--validate-jobs must be numeric"
+[[ "$SPLIT_JSON_MAX_BYTES" =~ ^[0-9]+$ ]] || die "--split-json-max-bytes must be numeric"
 (( SHARDS > 0 )) || die "--shards must be greater than zero"
 (( VALIDATE_JOBS > 0 )) || die "--validate-jobs must be greater than zero"
 (( VALIDATION_PARALLELISM > 0 )) || die "--validation-parallelism must be greater than zero"
@@ -278,11 +286,17 @@ main() {
   log "Materializing final outputs"
   (
     cd crawler
-    uv run resolver-inventory materialize-results \
-      --config configs/default.toml \
-      --inputs-glob "$WORK_DIR/validated-shards/*.json" \
-      --filtered-input "$WORK_DIR/discovery/filtered.json" \
+    materialize_cmd=(
+      uv run resolver-inventory materialize-results
+      --config configs/default.toml
+      --inputs-glob "$WORK_DIR/validated-shards/*.json"
+      --filtered-input "$WORK_DIR/discovery/filtered.json"
       --output "$ROOT_DIR/_build"
+    )
+    if (( SPLIT_JSON_MAX_BYTES > 0 )); then
+      materialize_cmd+=(--split-json-max-bytes "$SPLIT_JSON_MAX_BYTES")
+    fi
+    "${materialize_cmd[@]}"
   )
 
   log "Copying probe corpus and published assets"
@@ -303,7 +317,9 @@ main() {
     cd crawler
     uv run python scripts/update_history.py \
       --history-db "$ROOT_DIR/meta/history.duckdb" \
-      --validated-input "$ROOT_DIR/_build/validated.json" \
+      --accepted-input "$ROOT_DIR/_build/accepted.json" \
+      --candidate-input "$ROOT_DIR/_build/candidate.json" \
+      --rejected-input "$ROOT_DIR/_build/rejected.json" \
       --filtered-input "$ROOT_DIR/_build/filtered.json" \
       --meta-build "$ROOT_DIR/meta/build.json" \
       --crawler-sha-file "$WORK_DIR/meta/crawler-sha.txt"
