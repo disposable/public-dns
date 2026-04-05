@@ -10,12 +10,17 @@ Run the public-dns publish pipeline locally in one script.
 
 Options:
   --update-submodule              Refresh the crawler submodule to its latest remote commit
+  --gha-dispatch-defaults         Mirror workflow_dispatch defaults (validation parallelism 100 unless overridden)
+  --gha-schedule-defaults         Mirror scheduled-run defaults (validation parallelism 5 unless overridden)
   --validation-parallelism N      Per-shard validator parallelism override (default: 5)
-  --shards N                      Number of candidate shards to create (default: 10)
+  --shards N                      Number of candidate shards to create (default: 1)
   --validate-jobs N               Number of shard validation jobs to run concurrently (default: shard count)
   --split-json-max-bytes N        Split JSON outputs into .part files up to N bytes (default: 100000000, set 0 to disable)
   --work-dir PATH                 Working directory for temporary stage artifacts (default: .local-deploy)
   --test-sample N                 Quick-test mode: skip discovery, sample N accepted servers from json/accepted.json
+  --test-sample-file PATH         Input JSON file for --test-sample mode (default: json/accepted.json)
+  --test-sample-transports LIST   Comma-separated transports to keep in --test-sample mode (default: all)
+  --test-sample-reuse-dns-hosts   Reuse plain DNS hosts across UDP/TCP in --test-sample mode when a requested transport is scarce
   --commit                        Commit generated changes at the end
   --push                          Push after committing
   --commit-message TEXT           Commit message to use when --commit is enabled
@@ -31,6 +36,9 @@ Environment overrides:
   LOCAL_DEPLOY_PUSH
   LOCAL_DEPLOY_COMMIT_MESSAGE
   LOCAL_DEPLOY_TEST_SAMPLE
+  LOCAL_DEPLOY_TEST_SAMPLE_FILE
+  LOCAL_DEPLOY_TEST_SAMPLE_TRANSPORTS
+  LOCAL_DEPLOY_TEST_SAMPLE_REUSE_DNS_HOSTS
 EOF
 }
 
@@ -47,8 +55,12 @@ ROOT_DIR="$(
   cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd
 )"
 WORK_DIR="${LOCAL_DEPLOY_WORK_DIR:-$ROOT_DIR/.local-deploy}"
+VALIDATION_PARALLELISM_EXPLICIT=0
+if [[ -n "${VALIDATION_PARALLELISM+x}" ]]; then
+  VALIDATION_PARALLELISM_EXPLICIT=1
+fi
 VALIDATION_PARALLELISM="${VALIDATION_PARALLELISM:-5}"
-SHARDS="${SHARDS:-10}"
+SHARDS="${SHARDS:-1}"
 VALIDATE_JOBS="${VALIDATE_JOBS:-}"
 SPLIT_JSON_MAX_BYTES="${SPLIT_JSON_MAX_BYTES:-100000000}"
 COMMIT_CHANGES="${LOCAL_DEPLOY_COMMIT:-0}"
@@ -56,6 +68,10 @@ PUSH_CHANGES="${LOCAL_DEPLOY_PUSH:-0}"
 COMMIT_MESSAGE="${LOCAL_DEPLOY_COMMIT_MESSAGE:-chore(data): refresh public DNS assets}"
 UPDATE_SUBMODULE=0
 TEST_SAMPLE="${LOCAL_DEPLOY_TEST_SAMPLE:-0}"
+TEST_SAMPLE_FILE="${LOCAL_DEPLOY_TEST_SAMPLE_FILE:-$ROOT_DIR/json/accepted.json}"
+TEST_SAMPLE_TRANSPORTS="${LOCAL_DEPLOY_TEST_SAMPLE_TRANSPORTS:-}"
+TEST_SAMPLE_REUSE_DNS_HOSTS="${LOCAL_DEPLOY_TEST_SAMPLE_REUSE_DNS_HOSTS:-0}"
+GHA_DEFAULTS_MODE=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -63,8 +79,17 @@ while [[ $# -gt 0 ]]; do
       UPDATE_SUBMODULE=1
       shift
       ;;
+    --gha-dispatch-defaults)
+      GHA_DEFAULTS_MODE="dispatch"
+      shift
+      ;;
+    --gha-schedule-defaults)
+      GHA_DEFAULTS_MODE="schedule"
+      shift
+      ;;
     --validation-parallelism)
       VALIDATION_PARALLELISM="${2:?missing value for --validation-parallelism}"
+      VALIDATION_PARALLELISM_EXPLICIT=1
       shift 2
       ;;
     --shards)
@@ -99,6 +124,18 @@ while [[ $# -gt 0 ]]; do
       TEST_SAMPLE="${2:?missing value for --test-sample}"
       shift 2
       ;;
+    --test-sample-file)
+      TEST_SAMPLE_FILE="${2:?missing value for --test-sample-file}"
+      shift 2
+      ;;
+    --test-sample-transports)
+      TEST_SAMPLE_TRANSPORTS="${2:?missing value for --test-sample-transports}"
+      shift 2
+      ;;
+    --test-sample-reuse-dns-hosts)
+      TEST_SAMPLE_REUSE_DNS_HOSTS=1
+      shift
+      ;;
     --help)
       usage
       exit 0
@@ -109,6 +146,14 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
+if [[ -n "$GHA_DEFAULTS_MODE" && "$VALIDATION_PARALLELISM_EXPLICIT" == "0" ]]; then
+  if [[ "$GHA_DEFAULTS_MODE" == "dispatch" ]]; then
+    VALIDATION_PARALLELISM=100
+  else
+    VALIDATION_PARALLELISM=5
+  fi
+fi
+
 if [[ -z "$VALIDATE_JOBS" ]]; then
   VALIDATE_JOBS="$SHARDS"
 fi
@@ -118,9 +163,23 @@ fi
 [[ "$VALIDATE_JOBS" =~ ^[0-9]+$ ]] || die "--validate-jobs must be numeric"
 [[ "$SPLIT_JSON_MAX_BYTES" =~ ^[0-9]+$ ]] || die "--split-json-max-bytes must be numeric"
 [[ "$TEST_SAMPLE" =~ ^[0-9]+$ ]] || die "--test-sample must be numeric"
+[[ "$TEST_SAMPLE_REUSE_DNS_HOSTS" =~ ^[01]$ ]] || die "--test-sample-reuse-dns-hosts must be 0 or 1"
 (( SHARDS > 0 )) || die "--shards must be greater than zero"
 (( VALIDATE_JOBS > 0 )) || die "--validate-jobs must be greater than zero"
 (( VALIDATION_PARALLELISM > 0 )) || die "--validation-parallelism must be greater than zero"
+
+if [[ -n "$TEST_SAMPLE_TRANSPORTS" ]]; then
+  IFS=',' read -r -a test_sample_transport_values <<<"$TEST_SAMPLE_TRANSPORTS"
+  for transport in "${test_sample_transport_values[@]}"; do
+    case "$transport" in
+      dns-udp|dns-tcp|doh)
+        ;;
+      *)
+        die "--test-sample-transports values must be dns-udp,dns-tcp,doh"
+        ;;
+    esac
+  done
+fi
 
 ensure_uv() {
   if command -v uv >/dev/null 2>&1; then
@@ -231,29 +290,91 @@ main() {
     "$WORK_DIR/validated-shards"
 
   if (( TEST_SAMPLE > 0 )); then
-    log "Test-sample mode: skipping corpus generation and discovery, sampling $TEST_SAMPLE servers from json/accepted.json"
-    [[ -f "$ROOT_DIR/json/accepted.json" ]] || die "json/accepted.json not found; run a full deploy first"
-    [[ -f "$ROOT_DIR/probe-corpus/probe-corpus.json" ]] || die "probe-corpus/probe-corpus.json not found"
+    if [[ -n "$TEST_SAMPLE_TRANSPORTS" ]]; then
+      log "Test-sample mode: skipping corpus generation and discovery, sampling $TEST_SAMPLE servers from $TEST_SAMPLE_FILE with transports $TEST_SAMPLE_TRANSPORTS"
+    else
+      log "Test-sample mode: skipping corpus generation and discovery, sampling $TEST_SAMPLE servers from $TEST_SAMPLE_FILE"
+    fi
+    [[ -f "$TEST_SAMPLE_FILE" ]] || die "test sample file not found: $TEST_SAMPLE_FILE"
+
+    if [[ -f "$ROOT_DIR/probe-corpus/probe-corpus.json" ]]; then
+      cp -R "$ROOT_DIR/probe-corpus/." "$WORK_DIR/probe-corpus/"
+    else
+      log "probe-corpus/probe-corpus.json not found; generating a fresh probe corpus for sample mode"
+      (
+        cd crawler
+        uv run resolver-inventory generate-probe-corpus \
+          --config configs/probe-corpus.toml \
+          --output "$WORK_DIR/probe-corpus"
+      )
+      (
+        cd crawler
+        uv run resolver-inventory validate-probe-corpus \
+          --config configs/probe-corpus.toml \
+          --input "$WORK_DIR/probe-corpus/probe-corpus.json" \
+          --schema-version 2
+      )
+    fi
 
     # Stash inputs before we wipe the output directories.
-    cp "$ROOT_DIR/json/accepted.json" "$WORK_DIR/accepted-snapshot.json"
-    cp -R "$ROOT_DIR/probe-corpus/." "$WORK_DIR/probe-corpus/"
+    cp "$TEST_SAMPLE_FILE" "$WORK_DIR/accepted-snapshot.json"
   fi
 
   mkdir -p "$ROOT_DIR/_build" "$ROOT_DIR/json" "$ROOT_DIR/txt" "$ROOT_DIR/probe-corpus"
   rm -rf "$ROOT_DIR/_build"/* "$ROOT_DIR/json"/* "$ROOT_DIR/txt"/* "$ROOT_DIR/probe-corpus"/*
 
   if (( TEST_SAMPLE > 0 )); then
-    python3 - "$WORK_DIR/accepted-snapshot.json" "$WORK_DIR/discovery/candidates.json" "$TEST_SAMPLE" <<'PYEOF'
+    python3 - "$WORK_DIR/accepted-snapshot.json" "$WORK_DIR/discovery/candidates.json" "$TEST_SAMPLE" "$TEST_SAMPLE_TRANSPORTS" "$TEST_SAMPLE_REUSE_DNS_HOSTS" <<'PYEOF'
 import json, random, sys
-input_path, output_path, n = sys.argv[1], sys.argv[2], int(sys.argv[3])
+input_path, output_path, n, transports_raw, reuse_dns_hosts = (
+    sys.argv[1],
+    sys.argv[2],
+    int(sys.argv[3]),
+    sys.argv[4],
+    sys.argv[5] == "1",
+)
 with open(input_path) as f:
     data = json.load(f)
 candidates = [entry["candidate"] for entry in data]
+
+def clone_dns_transport(candidate, transport):
+    cloned = dict(candidate)
+    cloned["transport"] = transport
+    cloned["endpoint_url"] = None
+    cloned["path"] = None
+    cloned["tls_server_name"] = None
+    cloned["port"] = cloned.get("port") or 53
+    return cloned
+
+if reuse_dns_hosts:
+    plain_dns = [candidate for candidate in candidates if candidate["transport"] in {"dns-udp", "dns-tcp"}]
+    existing_keys = {
+        (candidate["transport"], candidate["host"], candidate.get("port") or 53)
+        for candidate in candidates
+        if candidate["transport"] in {"dns-udp", "dns-tcp"}
+    }
+    augmented = list(candidates)
+    for candidate in plain_dns:
+        for transport in ("dns-udp", "dns-tcp"):
+            key = (transport, candidate["host"], candidate.get("port") or 53)
+            if key in existing_keys:
+                continue
+            augmented.append(clone_dns_transport(candidate, transport))
+            existing_keys.add(key)
+    candidates = augmented
+
+if transports_raw:
+    allowed = {value for value in transports_raw.split(",") if value}
+    candidates = [candidate for candidate in candidates if candidate["transport"] in allowed]
 random.shuffle(candidates)
 sample = candidates[:n]
 with open(output_path, "w") as f:
     json.dump(sample, f, indent=2)
+if len(candidates) < n:
+    print(
+        f"[local-deploy] Requested {n} candidates but only {len(candidates)} matched "
+        f"the sample input and transport filter"
+    )
 print(f"[local-deploy] Sampled {len(sample)} of {len(candidates)} accepted candidates")
 PYEOF
 
