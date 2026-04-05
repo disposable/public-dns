@@ -30,21 +30,21 @@ The workflow:
 <!-- GENERATED_STATS_START -->
 ## 30-Day Validation Stats
 
-- Latest run: `2026-04-05` (`run_id=23994466168`)
+- Latest run: `2026-04-05` (`run_id=local-mizuki-20260405T130041Z`)
 - Runs tracked: `2`
-- Latest totals: `2585` accepted, `112` candidate, `120426` rejected, `2864` filtered
-- 30-day trend: accepted `-297`, rejected `+485`
+- Latest totals: `0` accepted, `0` candidate, `10` rejected, `0` filtered
+- 30-day trend: accepted `-2882`, rejected `-119931`
 - Currently quarantined DNS hosts: `0`
 
 ### Top Rejection Reasons
 
 | Reason | Count |
 | --- | ---: |
-| `udp_only` | 117416 |
-| `timeout_rate_high` | 117408 |
-| `nxdomain_spoofing` | 2680 |
-| `unexpected_rcode` | 2598 |
-| `error` | 657 |
+| `udp_only` | 58460 |
+| `timeout_rate_high` | 58457 |
+| `nxdomain_spoofing` | 1312 |
+| `unexpected_rcode` | 1282 |
+| `error` | 199 |
 
 Hosts that are `rejected` for 14 consecutive daily runs are quarantined for 90 days before they are tested again.
 <!-- GENERATED_STATS_END -->
@@ -78,6 +78,58 @@ For reproducible use, pin to a specific commit instead of following the latest r
 - `txt/unbound-forward.conf` - accepted plain DNS forward-zone config for Unbound
 
 Large JSON files may be split into `*.part-XXXX.json` files to stay below repository limits. When that happens, the part files together replace the unsplit file.
+
+## Scoring System
+
+Each resolver receives a composite `score` (0-100) based on four weighted components:
+
+| Component | Weight | Description |
+|-----------|--------|-------------|
+| Correctness | 0-50 | DNS/TLS errors, answer mismatches, NXDOMAIN spoofing |
+| Availability | 0-20 | Probe success rate (100% = 20 pts) |
+| Performance | 0-20 | Latency penalties for p50, p95, and jitter |
+| History | 0-10 | Stability rewards, flapping/failure penalties |
+
+**Score caps** may be applied:
+- 0-2 runs observed: max 90
+- 3-6 runs: max 95
+- 7-13 runs: max 98
+- 14+ runs: no cap
+
+Severe correctness issues (NXDOMAIN spoofing, TLS mismatch, answer mismatch) cap scores at ≤59.
+
+**Confidence score** (0-100) reflects measurement certainty separately from quality. It considers probe count, latency samples, historical observations, and source reliability metadata.
+
+### JSON Export Fields
+
+Each resolver entry includes:
+
+```json
+{
+  "status": "accepted",
+  "score": 87,
+  "score_breakdown": {
+    "correctness": 50,
+    "availability": 18,
+    "performance": 12,
+    "history": 7
+  },
+  "confidence_score": 65,
+  "score_caps_applied": ["insufficient_history"],
+  "derived_metrics": {
+    "p50_latency_ms": 45.2,
+    "p95_latency_ms": 120.5,
+    "jitter_ms": 75.3,
+    "latency_sample_count": 10,
+    "runs_seen_30d": 5,
+    "runs_seen_7d": 3,
+    "flaps_30d": 0,
+    "consecutive_success_days": 5,
+    "consecutive_fail_days": 0
+  },
+  "reasons": ["latency_high"]
+}
+```
 
 ## Local reproduction
 
