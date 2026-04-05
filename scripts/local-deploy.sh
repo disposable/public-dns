@@ -15,6 +15,7 @@ Options:
   --validate-jobs N               Number of shard validation jobs to run concurrently (default: shard count)
   --split-json-max-bytes N        Split JSON outputs into .part files up to N bytes (default: 100000000, set 0 to disable)
   --work-dir PATH                 Working directory for temporary stage artifacts (default: .local-deploy)
+  --test-sample N                 Quick-test mode: skip discovery, sample N accepted servers from json/accepted.json
   --commit                        Commit generated changes at the end
   --push                          Push after committing
   --commit-message TEXT           Commit message to use when --commit is enabled
@@ -29,6 +30,7 @@ Environment overrides:
   LOCAL_DEPLOY_COMMIT
   LOCAL_DEPLOY_PUSH
   LOCAL_DEPLOY_COMMIT_MESSAGE
+  LOCAL_DEPLOY_TEST_SAMPLE
 EOF
 }
 
@@ -53,6 +55,7 @@ COMMIT_CHANGES="${LOCAL_DEPLOY_COMMIT:-0}"
 PUSH_CHANGES="${LOCAL_DEPLOY_PUSH:-0}"
 COMMIT_MESSAGE="${LOCAL_DEPLOY_COMMIT_MESSAGE:-chore(data): refresh public DNS assets}"
 UPDATE_SUBMODULE=0
+TEST_SAMPLE="${LOCAL_DEPLOY_TEST_SAMPLE:-0}"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -92,6 +95,10 @@ while [[ $# -gt 0 ]]; do
       COMMIT_MESSAGE="${2:?missing value for --commit-message}"
       shift 2
       ;;
+    --test-sample)
+      TEST_SAMPLE="${2:?missing value for --test-sample}"
+      shift 2
+      ;;
     --help)
       usage
       exit 0
@@ -110,6 +117,7 @@ fi
 [[ "$SHARDS" =~ ^[0-9]+$ ]] || die "--shards must be numeric"
 [[ "$VALIDATE_JOBS" =~ ^[0-9]+$ ]] || die "--validate-jobs must be numeric"
 [[ "$SPLIT_JSON_MAX_BYTES" =~ ^[0-9]+$ ]] || die "--split-json-max-bytes must be numeric"
+[[ "$TEST_SAMPLE" =~ ^[0-9]+$ ]] || die "--test-sample must be numeric"
 (( SHARDS > 0 )) || die "--shards must be greater than zero"
 (( VALIDATE_JOBS > 0 )) || die "--validate-jobs must be greater than zero"
 (( VALIDATION_PARALLELISM > 0 )) || die "--validation-parallelism must be greater than zero"
@@ -221,46 +229,74 @@ main() {
     "$WORK_DIR/discovery/chunks" \
     "$WORK_DIR/meta" \
     "$WORK_DIR/validated-shards"
+
+  if (( TEST_SAMPLE > 0 )); then
+    log "Test-sample mode: skipping corpus generation and discovery, sampling $TEST_SAMPLE servers from json/accepted.json"
+    [[ -f "$ROOT_DIR/json/accepted.json" ]] || die "json/accepted.json not found; run a full deploy first"
+    [[ -f "$ROOT_DIR/probe-corpus/probe-corpus.json" ]] || die "probe-corpus/probe-corpus.json not found"
+
+    # Stash inputs before we wipe the output directories.
+    cp "$ROOT_DIR/json/accepted.json" "$WORK_DIR/accepted-snapshot.json"
+    cp -R "$ROOT_DIR/probe-corpus/." "$WORK_DIR/probe-corpus/"
+  fi
+
   mkdir -p "$ROOT_DIR/_build" "$ROOT_DIR/json" "$ROOT_DIR/txt" "$ROOT_DIR/probe-corpus"
   rm -rf "$ROOT_DIR/_build"/* "$ROOT_DIR/json"/* "$ROOT_DIR/txt"/* "$ROOT_DIR/probe-corpus"/*
 
-  log "Generating probe corpus"
-  (
-    cd crawler
-    uv run resolver-inventory generate-probe-corpus \
-      --config configs/probe-corpus.toml \
-      --output "$WORK_DIR/probe-corpus"
-  )
+  if (( TEST_SAMPLE > 0 )); then
+    python3 - "$WORK_DIR/accepted-snapshot.json" "$WORK_DIR/discovery/candidates.json" "$TEST_SAMPLE" <<'PYEOF'
+import json, random, sys
+input_path, output_path, n = sys.argv[1], sys.argv[2], int(sys.argv[3])
+with open(input_path) as f:
+    data = json.load(f)
+candidates = [entry["candidate"] for entry in data]
+random.shuffle(candidates)
+sample = candidates[:n]
+with open(output_path, "w") as f:
+    json.dump(sample, f, indent=2)
+print(f"[local-deploy] Sampled {len(sample)} of {len(candidates)} accepted candidates")
+PYEOF
 
-  log "Validating probe corpus"
-  (
-    cd crawler
-    uv run resolver-inventory validate-probe-corpus \
-      --config configs/probe-corpus.toml \
-      --input "$WORK_DIR/probe-corpus/probe-corpus.json" \
-      --schema-version 2
-  )
+    echo "[]" > "$WORK_DIR/discovery/filtered.json"
+  else
+    log "Generating probe corpus"
+    (
+      cd crawler
+      uv run resolver-inventory generate-probe-corpus \
+        --config configs/probe-corpus.toml \
+        --output "$WORK_DIR/probe-corpus"
+    )
 
-  log "Discovering candidates"
-  (
-    cd crawler
-    uv run resolver-inventory discover \
-      --config configs/default.toml \
-      --output "$WORK_DIR/discovery/candidates.json" \
-      --filtered-output "$WORK_DIR/discovery/filtered.json"
-  )
+    log "Validating probe corpus"
+    (
+      cd crawler
+      uv run resolver-inventory validate-probe-corpus \
+        --config configs/probe-corpus.toml \
+        --input "$WORK_DIR/probe-corpus/probe-corpus.json" \
+        --schema-version 2
+    )
 
-  log "Applying historical DNS quarantine"
-  (
-    cd crawler
-    uv run python scripts/apply_history_quarantine.py \
-      --history-db "$ROOT_DIR/meta/history.duckdb" \
-      --run-date "$(date -u +%F)" \
-      --candidates-input "$WORK_DIR/discovery/candidates.json" \
-      --filtered-input "$WORK_DIR/discovery/filtered.json" \
-      --candidates-output "$WORK_DIR/discovery/candidates.json" \
-      --filtered-output "$WORK_DIR/discovery/filtered.json"
-  )
+    log "Discovering candidates"
+    (
+      cd crawler
+      uv run resolver-inventory discover \
+        --config configs/default.toml \
+        --output "$WORK_DIR/discovery/candidates.json" \
+        --filtered-output "$WORK_DIR/discovery/filtered.json"
+    )
+
+    log "Applying historical DNS quarantine"
+    (
+      cd crawler
+      uv run python scripts/apply_history_quarantine.py \
+        --history-db "$ROOT_DIR/meta/history.duckdb" \
+        --run-date "$(date -u +%F)" \
+        --candidates-input "$WORK_DIR/discovery/candidates.json" \
+        --filtered-input "$WORK_DIR/discovery/filtered.json" \
+        --candidates-output "$WORK_DIR/discovery/candidates.json" \
+        --filtered-output "$WORK_DIR/discovery/filtered.json"
+    )
+  fi
 
   log "Splitting candidates into $SHARDS shards"
   (
