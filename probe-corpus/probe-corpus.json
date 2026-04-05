@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "corpus_version": "dev",
-  "generated_at": "2026-04-04T14:15:17Z",
+  "generated_at": "2026-04-05T00:00:00Z",
   "probes": [
     {
       "id": "positive-exact-a-root-servers-net-a",
@@ -44,6 +44,374 @@
       "qname_template": null,
       "expected_answers": [
         "170.247.170.2"
+      ],
+      "expected_nameservers": [],
+      "parent_zone": null,
+      "source": "iana-root-servers",
+      "stability_score": 1.0,
+      "notes": null
+    },
+    {
+      "id": "positive-exact-b-root-servers-net-aaaa",
+      "kind": "positive_exact",
+      "qtype": "AAAA",
+      "expected_mode": "exact_rrset",
+      "qname": "b.root-servers.net.",
+      "qname_template": null,
+      "expected_answers": [
+        "2801:1b8:10::b"
+      ],
+      "expected_nameservers": [],
+      "parent_zone": null,
+      "source": "iana-root-servers",
+      "stability_score": 1.0,
+      "notes": null
+    },
+    {
+      "id": "positive-exact-c-root-servers-net-a",
+      "kind": "positive_exact",
+      "qtype": "A",
+      "expected_mode": "exact_rrset",
+      "qname": "c.root-servers.net.",
+      "qname_template": null,
+      "expected_answers": [
+        "192.33.4.12"
+      ],
+      "expected_nameservers": [],
+      "parent_zone": null,
+      "source": "iana-root-servers",
+      "stability_score": 1.0,
+      "notes": null
+    },
+    {
+      "id": "positive-exact-c-root-servers-net-aaaa",
+      "kind": "positive_exact",
+      "qtype": "AAAA",
+      "expected_mode": "exact_rrset",
+      "qname": "c.root-servers.net.",
+      "qname_template": null,
+      "expected_answers": [
+        "2001:500:2::c"
+      ],
+      "expected_nameservers": [],
+      "parent_zone": null,
+      "source": "iana-root-servers",
+      "stability_score": 1.0,
+      "notes": null
+    },
+    {
+      "id": "positive-exact-d-root-servers-net-a",
+      "kind": "positive_exact",
+      "qtype": "A",
+      "expected_mode": "exact_rrset",
+      "qname": "d.root-servers.net.",
+      "qname_template": null,
+      "expected_answers": [
+        "199.7.91.13"
+      ],
+      "expected_nameservers": [],
+      "parent_zone": null,
+      "source": "iana-root-servers",
+      "stability_score": 1.0,
+      "notes": null
+    },
+    {
+      "id": "positive-exact-d-root-servers-net-aaaa",
+      "kind": "positive_exact",
+      "qtype": "AAAA",
+      "expected_mode": "exact_rrset",
+      "qname": "d.root-servers.net.",
+      "qname_template": null,
+      "expected_answers": [
+        "2001:500:2d::d"
+      ],
+      "expected_nameservers": [],
+      "parent_zone": null,
+      "source": "iana-root-servers",
+      "stability_score": 1.0,
+      "notes": null
+    },
+    {
+      "id": "positive-exact-e-root-servers-net-a",
+      "kind": "positive_exact",
+      "qtype": "A",
+      "expected_mode": "exact_rrset",
+      "qname": "e.root-servers.net.",
+      "qname_template": null,
+      "expected_answers": [
+        "192.203.230.10"
+      ],
+      "expected_nameservers": [],
+      "parent_zone": null,
+      "source": "iana-root-servers",
+      "stability_score": 1.0,
+      "notes": null
+    },
+    {
+      "id": "positive-exact-e-root-servers-net-aaaa",
+      "kind": "positive_exact",
+      "qtype": "AAAA",
+      "expected_mode": "exact_rrset",
+      "qname": "e.root-servers.net.",
+      "qname_template": null,
+      "expected_answers": [
+        "2001:500:a8::e"
+      ],
+      "expected_nameservers": [],
+      "parent_zone": null,
+      "source": "iana-root-servers",
+      "stability_score": 1.0,
+      "notes": null
+    },
+    {
+      "id": "positive-exact-f-root-servers-net-a",
+      "kind": "positive_exact",
+      "qtype": "A",
+      "expected_mode": "exact_rrset",
+      "qname": "f.root-servers.net.",
+      "qname_template": null,
+      "expected_answers": [
+        "192.5.5.241"
+      ],
+      "expected_nameservers": [],
+      "parent_zone": null,
+      "source": "iana-root-servers",
+      "stability_score": 1.0,
+      "notes": null
+    },
+    {
+      "id": "positive-exact-f-root-servers-net-aaaa",
+      "kind": "positive_exact",
+      "qtype": "AAAA",
+      "expected_mode": "exact_rrset",
+      "qname": "f.root-servers.net.",
+      "qname_template": null,
+      "expected_answers": [
+        "2001:500:2f::f"
+      ],
+      "expected_nameservers": [],
+      "parent_zone": null,
+      "source": "iana-root-servers",
+      "stability_score": 1.0,
+      "notes": null
+    },
+    {
+      "id": "positive-exact-g-root-servers-net-a",
+      "kind": "positive_exact",
+      "qtype": "A",
+      "expected_mode": "exact_rrset",
+      "qname": "g.root-servers.net.",
+      "qname_template": null,
+      "expected_answers": [
+        "192.112.36.4"
+      ],
+      "expected_nameservers": [],
+      "parent_zone": null,
+      "source": "iana-root-servers",
+      "stability_score": 1.0,
+      "notes": null
+    },
+    {
+      "id": "positive-exact-g-root-servers-net-aaaa",
+      "kind": "positive_exact",
+      "qtype": "AAAA",
+      "expected_mode": "exact_rrset",
+      "qname": "g.root-servers.net.",
+      "qname_template": null,
+      "expected_answers": [
+        "2001:500:12::d0d"
+      ],
+      "expected_nameservers": [],
+      "parent_zone": null,
+      "source": "iana-root-servers",
+      "stability_score": 1.0,
+      "notes": null
+    },
+    {
+      "id": "positive-exact-h-root-servers-net-a",
+      "kind": "positive_exact",
+      "qtype": "A",
+      "expected_mode": "exact_rrset",
+      "qname": "h.root-servers.net.",
+      "qname_template": null,
+      "expected_answers": [
+        "198.97.190.53"
+      ],
+      "expected_nameservers": [],
+      "parent_zone": null,
+      "source": "iana-root-servers",
+      "stability_score": 1.0,
+      "notes": null
+    },
+    {
+      "id": "positive-exact-h-root-servers-net-aaaa",
+      "kind": "positive_exact",
+      "qtype": "AAAA",
+      "expected_mode": "exact_rrset",
+      "qname": "h.root-servers.net.",
+      "qname_template": null,
+      "expected_answers": [
+        "2001:500:1::53"
+      ],
+      "expected_nameservers": [],
+      "parent_zone": null,
+      "source": "iana-root-servers",
+      "stability_score": 1.0,
+      "notes": null
+    },
+    {
+      "id": "positive-exact-i-root-servers-net-a",
+      "kind": "positive_exact",
+      "qtype": "A",
+      "expected_mode": "exact_rrset",
+      "qname": "i.root-servers.net.",
+      "qname_template": null,
+      "expected_answers": [
+        "192.36.148.17"
+      ],
+      "expected_nameservers": [],
+      "parent_zone": null,
+      "source": "iana-root-servers",
+      "stability_score": 1.0,
+      "notes": null
+    },
+    {
+      "id": "positive-exact-i-root-servers-net-aaaa",
+      "kind": "positive_exact",
+      "qtype": "AAAA",
+      "expected_mode": "exact_rrset",
+      "qname": "i.root-servers.net.",
+      "qname_template": null,
+      "expected_answers": [
+        "2001:7fe::53"
+      ],
+      "expected_nameservers": [],
+      "parent_zone": null,
+      "source": "iana-root-servers",
+      "stability_score": 1.0,
+      "notes": null
+    },
+    {
+      "id": "positive-exact-j-root-servers-net-a",
+      "kind": "positive_exact",
+      "qtype": "A",
+      "expected_mode": "exact_rrset",
+      "qname": "j.root-servers.net.",
+      "qname_template": null,
+      "expected_answers": [
+        "192.58.128.30"
+      ],
+      "expected_nameservers": [],
+      "parent_zone": null,
+      "source": "iana-root-servers",
+      "stability_score": 1.0,
+      "notes": null
+    },
+    {
+      "id": "positive-exact-j-root-servers-net-aaaa",
+      "kind": "positive_exact",
+      "qtype": "AAAA",
+      "expected_mode": "exact_rrset",
+      "qname": "j.root-servers.net.",
+      "qname_template": null,
+      "expected_answers": [
+        "2001:503:c27::2:30"
+      ],
+      "expected_nameservers": [],
+      "parent_zone": null,
+      "source": "iana-root-servers",
+      "stability_score": 1.0,
+      "notes": null
+    },
+    {
+      "id": "positive-exact-k-root-servers-net-a",
+      "kind": "positive_exact",
+      "qtype": "A",
+      "expected_mode": "exact_rrset",
+      "qname": "k.root-servers.net.",
+      "qname_template": null,
+      "expected_answers": [
+        "193.0.14.129"
+      ],
+      "expected_nameservers": [],
+      "parent_zone": null,
+      "source": "iana-root-servers",
+      "stability_score": 1.0,
+      "notes": null
+    },
+    {
+      "id": "positive-exact-k-root-servers-net-aaaa",
+      "kind": "positive_exact",
+      "qtype": "AAAA",
+      "expected_mode": "exact_rrset",
+      "qname": "k.root-servers.net.",
+      "qname_template": null,
+      "expected_answers": [
+        "2001:7fd::1"
+      ],
+      "expected_nameservers": [],
+      "parent_zone": null,
+      "source": "iana-root-servers",
+      "stability_score": 1.0,
+      "notes": null
+    },
+    {
+      "id": "positive-exact-l-root-servers-net-a",
+      "kind": "positive_exact",
+      "qtype": "A",
+      "expected_mode": "exact_rrset",
+      "qname": "l.root-servers.net.",
+      "qname_template": null,
+      "expected_answers": [
+        "199.7.83.42"
+      ],
+      "expected_nameservers": [],
+      "parent_zone": null,
+      "source": "iana-root-servers",
+      "stability_score": 1.0,
+      "notes": null
+    },
+    {
+      "id": "positive-exact-l-root-servers-net-aaaa",
+      "kind": "positive_exact",
+      "qtype": "AAAA",
+      "expected_mode": "exact_rrset",
+      "qname": "l.root-servers.net.",
+      "qname_template": null,
+      "expected_answers": [
+        "2001:500:9f::42"
+      ],
+      "expected_nameservers": [],
+      "parent_zone": null,
+      "source": "iana-root-servers",
+      "stability_score": 1.0,
+      "notes": null
+    },
+    {
+      "id": "positive-exact-m-root-servers-net-a",
+      "kind": "positive_exact",
+      "qtype": "A",
+      "expected_mode": "exact_rrset",
+      "qname": "m.root-servers.net.",
+      "qname_template": null,
+      "expected_answers": [
+        "202.12.27.33"
+      ],
+      "expected_nameservers": [],
+      "parent_zone": null,
+      "source": "iana-root-servers",
+      "stability_score": 1.0,
+      "notes": null
+    },
+    {
+      "id": "positive-exact-m-root-servers-net-aaaa",
+      "kind": "positive_exact",
+      "qtype": "AAAA",
+      "expected_mode": "exact_rrset",
+      "qname": "m.root-servers.net.",
+      "qname_template": null,
+      "expected_answers": [
+        "2001:dc3::35"
       ],
       "expected_nameservers": [],
       "parent_zone": null,
@@ -231,6 +599,62 @@
       "notes": null
     },
     {
+      "id": "positive-consensus-fr-ns",
+      "kind": "positive_consensus",
+      "qtype": "NS",
+      "expected_mode": "consensus_match",
+      "qname": "fr.",
+      "qname_template": null,
+      "expected_answers": [],
+      "expected_nameservers": [],
+      "parent_zone": null,
+      "source": "iana-root-db-fr",
+      "stability_score": 0.9,
+      "notes": null
+    },
+    {
+      "id": "positive-consensus-nl-ns",
+      "kind": "positive_consensus",
+      "qtype": "NS",
+      "expected_mode": "consensus_match",
+      "qname": "nl.",
+      "qname_template": null,
+      "expected_answers": [],
+      "expected_nameservers": [],
+      "parent_zone": null,
+      "source": "iana-root-db-nl",
+      "stability_score": 0.9,
+      "notes": null
+    },
+    {
+      "id": "positive-consensus-br-ns",
+      "kind": "positive_consensus",
+      "qtype": "NS",
+      "expected_mode": "consensus_match",
+      "qname": "br.",
+      "qname_template": null,
+      "expected_answers": [],
+      "expected_nameservers": [],
+      "parent_zone": null,
+      "source": "iana-root-db-br",
+      "stability_score": 0.9,
+      "notes": null
+    },
+    {
+      "id": "positive-consensus-au-ns",
+      "kind": "positive_consensus",
+      "qtype": "NS",
+      "expected_mode": "consensus_match",
+      "qname": "au.",
+      "qname_template": null,
+      "expected_answers": [],
+      "expected_nameservers": [],
+      "parent_zone": null,
+      "source": "iana-root-db-au",
+      "stability_score": 0.9,
+      "notes": null
+    },
+    {
       "id": "negative-generated-com-a",
       "kind": "negative_generated",
       "qtype": "A",
@@ -285,6 +709,48 @@
       "source": "negative-parent-pool",
       "stability_score": 0.8,
       "notes": null
+    },
+    {
+      "id": "negative-generated-org-a",
+      "kind": "negative_generated",
+      "qtype": "A",
+      "expected_mode": "nxdomain",
+      "qname": null,
+      "qname_template": "{uuid}.org.",
+      "expected_answers": [],
+      "expected_nameservers": [],
+      "parent_zone": "org.",
+      "source": "negative-parent-pool",
+      "stability_score": 0.8,
+      "notes": null
+    },
+    {
+      "id": "negative-generated-uk-a",
+      "kind": "negative_generated",
+      "qtype": "A",
+      "expected_mode": "nxdomain",
+      "qname": null,
+      "qname_template": "{uuid}.uk.",
+      "expected_answers": [],
+      "expected_nameservers": [],
+      "parent_zone": "uk.",
+      "source": "negative-parent-pool",
+      "stability_score": 0.8,
+      "notes": null
+    },
+    {
+      "id": "negative-generated-fr-a",
+      "kind": "negative_generated",
+      "qtype": "A",
+      "expected_mode": "nxdomain",
+      "qname": null,
+      "qname_template": "{uuid}.fr.",
+      "expected_answers": [],
+      "expected_nameservers": [],
+      "parent_zone": "fr.",
+      "source": "negative-parent-pool",
+      "stability_score": 0.8,
+      "notes": null
     }
   ],
   "generator_version": "0.1.0",
@@ -292,11 +758,15 @@
     "https://www.iana.org/domains/root/servers",
     "https://www.iana.org/domains/root/db/de.html",
     "https://www.iana.org/domains/root/db/uk.html",
-    "https://www.iana.org/domains/root/db/jp.html"
+    "https://www.iana.org/domains/root/db/jp.html",
+    "https://www.iana.org/domains/root/db/fr.html",
+    "https://www.iana.org/domains/root/db/nl.html",
+    "https://www.iana.org/domains/root/db/br.html",
+    "https://www.iana.org/domains/root/db/au.html"
   ],
   "probe_counts": {
-    "positive_exact": 10,
-    "positive_consensus": 3,
-    "negative_generated": 4
+    "positive_exact": 33,
+    "positive_consensus": 7,
+    "negative_generated": 7
   }
 }
