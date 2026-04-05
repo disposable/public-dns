@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "corpus_version": "dev",
-  "generated_at": "2026-04-05T00:00:00Z",
+  "generated_at": "2026-04-05T04:45:43Z",
   "probes": [
     {
       "id": "positive-exact-a-root-servers-net-a",
@@ -468,6 +468,22 @@
       "notes": null
     },
     {
+      "id": "positive-exact-f-nic-de-aaaa",
+      "kind": "positive_exact",
+      "qtype": "AAAA",
+      "expected_mode": "exact_rrset",
+      "qname": "f.nic.de.",
+      "qname_template": null,
+      "expected_answers": [
+        "2a02:568:0:2::53"
+      ],
+      "expected_nameservers": [],
+      "parent_zone": null,
+      "source": "iana-root-db-de",
+      "stability_score": 1.0,
+      "notes": null
+    },
+    {
       "id": "positive-exact-dns1-nic-uk-a",
       "kind": "positive_exact",
       "qtype": "A",
@@ -508,6 +524,22 @@
       "qname_template": null,
       "expected_answers": [
         "156.154.100.3"
+      ],
+      "expected_nameservers": [],
+      "parent_zone": null,
+      "source": "iana-root-db-uk",
+      "stability_score": 1.0,
+      "notes": null
+    },
+    {
+      "id": "positive-exact-nsb-nic-uk-a",
+      "kind": "positive_exact",
+      "qtype": "A",
+      "expected_mode": "exact_rrset",
+      "qname": "nsb.nic.uk.",
+      "qname_template": null,
+      "expected_answers": [
+        "156.154.101.3"
       ],
       "expected_nameservers": [],
       "parent_zone": null,
@@ -606,7 +638,11 @@
       "qname": "fr.",
       "qname_template": null,
       "expected_answers": [],
-      "expected_nameservers": [],
+      "expected_nameservers": [
+        "d.nic.fr.",
+        "f.ext.nic.fr.",
+        "g.ext.nic.fr."
+      ],
       "parent_zone": null,
       "source": "iana-root-db-fr",
       "stability_score": 0.9,
@@ -620,7 +656,11 @@
       "qname": "nl.",
       "qname_template": null,
       "expected_answers": [],
-      "expected_nameservers": [],
+      "expected_nameservers": [
+        "ns1.dns.nl.",
+        "ns3.dns.nl.",
+        "ns4.dns.nl."
+      ],
       "parent_zone": null,
       "source": "iana-root-db-nl",
       "stability_score": 0.9,
@@ -634,7 +674,14 @@
       "qname": "br.",
       "qname_template": null,
       "expected_answers": [],
-      "expected_nameservers": [],
+      "expected_nameservers": [
+        "a.dns.br.",
+        "b.dns.br.",
+        "c.dns.br.",
+        "d.dns.br.",
+        "e.dns.br.",
+        "f.dns.br."
+      ],
       "parent_zone": null,
       "source": "iana-root-db-br",
       "stability_score": 0.9,
@@ -648,7 +695,13 @@
       "qname": "au.",
       "qname_template": null,
       "expected_answers": [],
-      "expected_nameservers": [],
+      "expected_nameservers": [
+        "a.au.",
+        "q.au.",
+        "r.au.",
+        "s.au.",
+        "t.au."
+      ],
       "parent_zone": null,
       "source": "iana-root-db-au",
       "stability_score": 0.9,
@@ -765,7 +818,7 @@
     "https://www.iana.org/domains/root/db/au.html"
   ],
   "probe_counts": {
-    "positive_exact": 33,
+    "positive_exact": 35,
     "positive_consensus": 7,
     "negative_generated": 7
   }

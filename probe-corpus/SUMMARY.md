@@ -3,18 +3,20 @@
 - Corpus version: `dev`
 - Schema version: `2`
 - Generator version: `0.1.0`
-- Generated at: `2026-04-05T00:00:00Z`
-- Accepted probes: `47`
+- Generated at: `2026-04-05T04:45:43Z`
+- Candidates seen: `53`
+- Accepted probes: `49`
+- Rejected probes: `4`
 
 ## Accepted Counts
 
 - `negative_generated`: 7
 - `positive_consensus`: 7
-- `positive_exact`: 33
+- `positive_exact`: 35
 
 ## Rejected By Reason
 
-- none
+- `exact_rrset_mismatch`: 4
 
 ## Baseline Resolvers
 
@@ -30,6 +32,8 @@
 
 ## Dropped Seeds
 
+- `z.nic.de.` -> `exact_rrset_mismatch`
+- `z.nic.de.` -> `exact_rrset_mismatch`
 - `b.dns.jp.` -> `exact_rrset_mismatch`
 - `h.dns.jp.` -> `exact_rrset_mismatch`
 
