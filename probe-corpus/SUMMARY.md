@@ -3,20 +3,18 @@
 - Corpus version: `dev`
 - Schema version: `2`
 - Generator version: `0.1.0`
-- Generated at: `2026-04-04T14:15:17Z`
-- Candidates seen: `19`
-- Accepted probes: `17`
-- Rejected probes: `2`
+- Generated at: `2026-04-05T00:00:00Z`
+- Accepted probes: `47`
 
 ## Accepted Counts
 
-- `negative_generated`: 4
-- `positive_consensus`: 3
-- `positive_exact`: 10
+- `negative_generated`: 7
+- `positive_consensus`: 7
+- `positive_exact`: 33
 
 ## Rejected By Reason
 
-- `exact_rrset_mismatch`: 2
+- none
 
 ## Baseline Resolvers
 
@@ -41,3 +39,7 @@
 - https://www.iana.org/domains/root/db/de.html
 - https://www.iana.org/domains/root/db/uk.html
 - https://www.iana.org/domains/root/db/jp.html
+- https://www.iana.org/domains/root/db/fr.html
+- https://www.iana.org/domains/root/db/nl.html
+- https://www.iana.org/domains/root/db/br.html
+- https://www.iana.org/domains/root/db/au.html
