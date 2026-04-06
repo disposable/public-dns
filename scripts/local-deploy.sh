@@ -432,13 +432,17 @@ PYEOF
 
   log "Validating shards with $VALIDATE_JOBS concurrent jobs and validation parallelism $VALIDATION_PARALLELISM"
   mapfile -t shard_files < <(find "$WORK_DIR/discovery/chunks" -maxdepth 1 -name 'chunk-*.json' | sort)
+  shard_pids=()
   for shard_file in "${shard_files[@]}"; do
     shard_id="$(basename "$shard_file" .json)"
     shard_id="${shard_id#chunk-}"
     wait_for_slot
     run_validate_shard "$shard_id" &
+    shard_pids+=("$!")
   done
-  wait
+  for pid in "${shard_pids[@]}"; do
+    wait "$pid" || die "one or more shard validation jobs failed"
+  done
 
   log "Materializing final outputs"
   (
@@ -481,6 +485,7 @@ PYEOF
       --meta-build "$ROOT_DIR/meta/build.json" \
       --crawler-sha-file "$WORK_DIR/meta/crawler-sha.txt"
   )
+  log "History database updated"
 
   log "Generating README statistics"
   (
@@ -489,6 +494,7 @@ PYEOF
       --history-db "$ROOT_DIR/meta/history.duckdb" \
       --readme "$ROOT_DIR/README.md"
   )
+  log "README statistics updated"
 
   commit_outputs
   log "Local deploy run completed successfully"
