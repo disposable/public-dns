@@ -63,8 +63,21 @@ jobs:
                   mkdir -p stage-inputs/probe-corpus
                   mkdir -p stage-inputs/discovery/chunks
                   mkdir -p stage-inputs/meta
+                  mkdir -p stage-inputs/tools
                   rm -rf stage-inputs/probe-corpus/* stage-inputs/discovery/* stage-inputs/meta/*
                   mkdir -p stage-inputs/discovery/chunks
+
+            - name: Install MassDNS build dependencies
+              run: |
+                  sudo apt-get update
+                  sudo apt-get install -y --no-install-recommends build-essential ca-certificates git libldns-dev
+
+            - name: Build MassDNS binary
+              run: |
+                  git clone --depth 1 https://github.com/blechschmidt/massdns.git /tmp/massdns
+                  make -C /tmp/massdns
+                  install -m 0755 /tmp/massdns/bin/massdns stage-inputs/tools/massdns
+                  stage-inputs/tools/massdns --help >/dev/null
 
             - name: Generate probe corpus
               working-directory: crawler
@@ -172,12 +185,15 @@ jobs:
               run: |
                   SHARD="$(printf '%02d' "${{ matrix.shard }}")"
                   mkdir -p validated-shards
+                  chmod +x stage-inputs/tools/massdns
                   cd crawler
                   uv run resolver-inventory validate \
                     --config configs/default.toml \
                     --input ../stage-inputs/discovery/chunks/chunk-"${SHARD}".json \
                     --probe-corpus ../stage-inputs/probe-corpus/probe-corpus.json \
                     --validation-parallelism "${VALIDATION_PARALLELISM}" \
+                    --dns-backend massdns \
+                    --massdns-bin ../stage-inputs/tools/massdns \
                     --output ../validated-shards/shard-"${SHARD}".json
 
             - name: Upload validated shard
