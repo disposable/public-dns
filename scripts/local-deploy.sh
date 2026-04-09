@@ -13,6 +13,8 @@ Options:
   --gha-dispatch-defaults         Mirror workflow_dispatch defaults (validation parallelism 100 unless overridden)
   --gha-schedule-defaults         Mirror scheduled-run defaults (validation parallelism 5 unless overridden)
   --validation-parallelism N      Per-shard validator parallelism override (default: 5)
+  --dns-backend KIND              Plain DNS backend for validation: python or massdns (default: python)
+  --massdns-bin PATH              MassDNS binary path when --dns-backend=massdns (optional)
   --shards N                      Number of candidate shards to create (default: 1)
   --validate-jobs N               Number of shard validation jobs to run concurrently (default: shard count)
   --split-json-max-bytes N        Split JSON outputs into .part files up to N bytes (default: 100000000, set 0 to disable)
@@ -28,6 +30,8 @@ Options:
 
 Environment overrides:
   VALIDATION_PARALLELISM
+  LOCAL_DEPLOY_DNS_BACKEND
+  LOCAL_DEPLOY_MASSDNS_BIN
   SHARDS
   VALIDATE_JOBS
   SPLIT_JSON_MAX_BYTES
@@ -60,6 +64,8 @@ if [[ -n "${VALIDATION_PARALLELISM+x}" ]]; then
   VALIDATION_PARALLELISM_EXPLICIT=1
 fi
 VALIDATION_PARALLELISM="${VALIDATION_PARALLELISM:-5}"
+DNS_BACKEND="${LOCAL_DEPLOY_DNS_BACKEND:-python}"
+MASSDNS_BIN="${LOCAL_DEPLOY_MASSDNS_BIN:-}"
 SHARDS="${SHARDS:-1}"
 VALIDATE_JOBS="${VALIDATE_JOBS:-}"
 SPLIT_JSON_MAX_BYTES="${SPLIT_JSON_MAX_BYTES:-100000000}"
@@ -90,6 +96,14 @@ while [[ $# -gt 0 ]]; do
     --validation-parallelism)
       VALIDATION_PARALLELISM="${2:?missing value for --validation-parallelism}"
       VALIDATION_PARALLELISM_EXPLICIT=1
+      shift 2
+      ;;
+    --dns-backend)
+      DNS_BACKEND="${2:?missing value for --dns-backend}"
+      shift 2
+      ;;
+    --massdns-bin)
+      MASSDNS_BIN="${2:?missing value for --massdns-bin}"
       shift 2
       ;;
     --shards)
@@ -159,6 +173,20 @@ if [[ -z "$VALIDATE_JOBS" ]]; then
 fi
 
 [[ "$VALIDATION_PARALLELISM" =~ ^[0-9]+$ ]] || die "--validation-parallelism must be numeric"
+case "$DNS_BACKEND" in
+  python|massdns)
+    ;;
+  *)
+    die "--dns-backend must be one of: python, massdns"
+    ;;
+esac
+if [[ "$DNS_BACKEND" == "massdns" && -n "$MASSDNS_BIN" ]]; then
+  if [[ "$MASSDNS_BIN" == */* ]]; then
+    [[ -x "$MASSDNS_BIN" ]] || die "--massdns-bin is not executable: $MASSDNS_BIN"
+  else
+    command -v "$MASSDNS_BIN" >/dev/null 2>&1 || die "--massdns-bin not found on PATH: $MASSDNS_BIN"
+  fi
+fi
 [[ "$SHARDS" =~ ^[0-9]+$ ]] || die "--shards must be numeric"
 [[ "$VALIDATE_JOBS" =~ ^[0-9]+$ ]] || die "--validate-jobs must be numeric"
 [[ "$SPLIT_JSON_MAX_BYTES" =~ ^[0-9]+$ ]] || die "--split-json-max-bytes must be numeric"
@@ -208,15 +236,23 @@ run_validate_shard() {
   local shard="$1"
   local chunk_path="$WORK_DIR/discovery/chunks/chunk-${shard}.json"
   local output_path="$WORK_DIR/validated-shards/shard-${shard}.json"
+  local validate_cmd=(
+    uv run resolver-inventory validate
+    --config configs/default.toml
+    --input "$chunk_path"
+    --probe-corpus "$WORK_DIR/probe-corpus/probe-corpus.json"
+    --validation-parallelism "$VALIDATION_PARALLELISM"
+    --dns-backend "$DNS_BACKEND"
+    --output "$output_path"
+  )
+
+  if [[ "$DNS_BACKEND" == "massdns" && -n "$MASSDNS_BIN" ]]; then
+    validate_cmd+=(--massdns-bin "$MASSDNS_BIN")
+  fi
 
   (
     cd "$ROOT_DIR/crawler"
-    uv run resolver-inventory validate \
-      --config configs/default.toml \
-      --input "$chunk_path" \
-      --probe-corpus "$WORK_DIR/probe-corpus/probe-corpus.json" \
-      --validation-parallelism "$VALIDATION_PARALLELISM" \
-      --output "$output_path"
+    "${validate_cmd[@]}"
   )
 }
 
@@ -430,6 +466,11 @@ PYEOF
 
   git -C crawler rev-parse HEAD >"$WORK_DIR/meta/crawler-sha.txt"
 
+  if [[ "$DNS_BACKEND" == "massdns" && -n "$MASSDNS_BIN" ]]; then
+    log "Using plain DNS backend $DNS_BACKEND with massdns binary $MASSDNS_BIN"
+  else
+    log "Using plain DNS backend $DNS_BACKEND"
+  fi
   log "Validating shards with $VALIDATE_JOBS concurrent jobs and validation parallelism $VALIDATION_PARALLELISM"
   mapfile -t shard_files < <(find "$WORK_DIR/discovery/chunks" -maxdepth 1 -name 'chunk-*.json' | sort)
   shard_pids=()
