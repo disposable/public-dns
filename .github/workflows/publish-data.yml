@@ -2,8 +2,8 @@ name: Publish public DNS data
 
 # Action major versions below were bumped for Node 24 compatibility.
 on:
-    schedule:
-        - cron: "15 2 * * *"
+    # schedule:
+    #     - cron: "15 2 * * *"
     workflow_dispatch:
         inputs:
             update_submodule:
