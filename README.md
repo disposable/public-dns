@@ -30,9 +30,9 @@ The workflow:
 <!-- GENERATED_STATS_START -->
 ## 30-Day Validation Stats
 
-- Latest run: `2026-04-07` (`run_id=local-sonar-20260407T203533Z`)
+- Latest run: `2026-06-15` (`run_id=27538065651`)
 - Runs tracked: `1`
-- Latest totals: `7635` accepted, `2044` candidate, `113444` rejected, `0` filtered
+- Latest totals: `75` accepted, `3` candidate, `34` rejected, `0` filtered
 - 30-day trend: accepted `+0`, rejected `+0`
 - Currently quarantined DNS hosts: `0`
 
@@ -40,11 +40,11 @@ The workflow:
 
 | Reason | Count |
 | --- | ---: |
-| `timeout_or_error` | 111238 |
-| `timeout_rate_high` | 105298 |
-| `no_latency_samples` | 102881 |
-| `udp_only` | 57453 |
-| `latency_moderate` | 7519 |
+| `latency_moderate` | 25 |
+| `error` | 14 |
+| `http_error` | 9 |
+| `answer_mismatch` | 7 |
+| `latency_jitter_high` | 7 |
 
 Hosts that are `rejected` for 14 consecutive daily runs are quarantined for 90 days before they are tested again.
 <!-- GENERATED_STATS_END -->

@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "corpus_version": "dev",
-  "generated_at": "2026-04-07T09:29:08Z",
+  "generated_at": "2026-06-15T09:50:42Z",
   "probes": [
     {
       "id": "positive-exact-a-root-servers-net-a",
@@ -806,7 +806,7 @@
       "notes": null
     }
   ],
-  "generator_version": "0.1.0",
+  "generator_version": "0.1.1",
   "sources_used": [
     "https://www.iana.org/domains/root/servers",
     "https://www.iana.org/domains/root/db/de.html",
