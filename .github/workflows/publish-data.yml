@@ -168,7 +168,7 @@ jobs:
 
     validate-shards:
         runs-on: ubuntu-latest
-        timeout-minutes: 60
+        timeout-minutes: 120
         needs: [discover-and-split]
         strategy:
             fail-fast: false
@@ -208,7 +208,7 @@ jobs:
             - name: Validate shard
               id: validate
               env:
-                  VALIDATION_PARALLELISM: ${{ github.event_name == 'workflow_dispatch' && inputs.validation_parallelism || 5 }}
+                  VALIDATION_PARALLELISM: ${{ github.event_name == 'workflow_dispatch' && inputs.validation_parallelism || 100 }}
               run: |
                   SHARD="$(printf '%02d' "${{ matrix.shard }}")"
                   mkdir -p validated-shards
