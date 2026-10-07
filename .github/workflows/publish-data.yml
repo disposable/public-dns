@@ -202,6 +202,8 @@ jobs:
                     --validation-parallelism "${VALIDATION_PARALLELISM}" \
                     --dns-backend massdns \
                     --massdns-bin ../stage-inputs/tools/massdns \
+                    --history-db ../meta/history.duckdb \
+                    --run-date "$(date -u +%F)" \
                     --output ../validated-shards/shard-"${SHARD}".json
 
             - name: Upload validated shard

@@ -243,6 +243,8 @@ run_validate_shard() {
     --probe-corpus "$WORK_DIR/probe-corpus/probe-corpus.json"
     --validation-parallelism "$VALIDATION_PARALLELISM"
     --dns-backend "$DNS_BACKEND"
+    --history-db "$ROOT_DIR/meta/history.duckdb"
+    --run-date "$(date -u +%F)"
     --output "$output_path"
   )
 
