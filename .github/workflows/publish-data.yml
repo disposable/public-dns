@@ -14,7 +14,7 @@ on:
             validation_parallelism:
                 description: "Per-VM validation parallelism for shard jobs"
                 required: false
-                default: 100
+                default: 300
                 type: number
             commit_message:
                 description: "Optional custom commit message"
@@ -208,7 +208,7 @@ jobs:
             - name: Validate shard
               id: validate
               env:
-                  VALIDATION_PARALLELISM: ${{ github.event_name == 'workflow_dispatch' && inputs.validation_parallelism || 100 }}
+                  VALIDATION_PARALLELISM: ${{ github.event_name == 'workflow_dispatch' && inputs.validation_parallelism || 300 }}
               run: |
                   SHARD="$(printf '%02d' "${{ matrix.shard }}")"
                   mkdir -p validated-shards
