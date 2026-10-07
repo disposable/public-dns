@@ -209,3 +209,6 @@ __marimo__/
 
 _build/
 /.local-deploy/
+
+# Resolver history database lives on the `state` orphan branch
+/meta/history.duckdb

@@ -2,8 +2,8 @@ name: Publish public DNS data
 
 # Action major versions below were bumped for Node 24 compatibility.
 on:
-    # schedule:
-    #     - cron: "15 2 * * *"
+    schedule:
+        - cron: "15 2 * * *"
     workflow_dispatch:
         inputs:
             update_submodule:
@@ -32,6 +32,7 @@ concurrency:
 jobs:
     discover-and-split:
         runs-on: ubuntu-latest
+        timeout-minutes: 30
         outputs:
             validate_matrix: ${{ steps.validate-matrix.outputs.matrix }}
 
@@ -105,6 +106,15 @@ jobs:
                   --output ../stage-inputs/discovery/candidates.json
                   --filtered-output ../stage-inputs/discovery/filtered.json
 
+            - name: Restore history database from state branch
+              run: |
+                  mkdir -p meta
+                  if git fetch --depth=1 origin state; then
+                    git show FETCH_HEAD:meta/history.duckdb > meta/history.duckdb || rm -f meta/history.duckdb
+                  else
+                    echo "state branch not found; starting with empty history"
+                  fi
+
             - name: Apply historical DNS quarantine
               working-directory: crawler
               run: >
@@ -115,6 +125,14 @@ jobs:
                   --filtered-input ../stage-inputs/discovery/filtered.json
                   --candidates-output ../stage-inputs/discovery/candidates.json
                   --filtered-output ../stage-inputs/discovery/filtered.json
+
+            - name: Stage history database for downstream jobs
+              run: |
+                  if [ -f meta/history.duckdb ]; then
+                    cp meta/history.duckdb stage-inputs/meta/history.duckdb
+                  else
+                    echo "no history database available; shards score without history"
+                  fi
 
             - name: Split candidates into shards
               id: split
@@ -150,6 +168,7 @@ jobs:
 
     validate-shards:
         runs-on: ubuntu-latest
+        timeout-minutes: 60
         needs: [discover-and-split]
         strategy:
             fail-fast: false
@@ -202,7 +221,7 @@ jobs:
                     --validation-parallelism "${VALIDATION_PARALLELISM}" \
                     --dns-backend massdns \
                     --massdns-bin ../stage-inputs/tools/massdns \
-                    --history-db ../meta/history.duckdb \
+                    --history-db ../stage-inputs/meta/history.duckdb \
                     --run-date "$(date -u +%F)" \
                     --output ../validated-shards/shard-"${SHARD}".json
 
@@ -214,6 +233,7 @@ jobs:
 
     merge-and-publish:
         runs-on: ubuntu-latest
+        timeout-minutes: 30
         needs: [discover-and-split, validate-shards]
 
         steps:
@@ -310,7 +330,7 @@ jobs:
               working-directory: crawler
               run: >
                   uv run python scripts/update_history.py
-                  --history-db ../meta/history.duckdb
+                  --history-db ../stage-inputs/meta/history.duckdb
                   --accepted-input ../_build/accepted.json
                   --candidate-input ../_build/candidate.json
                   --rejected-input ../_build/rejected.json
@@ -322,8 +342,27 @@ jobs:
               working-directory: crawler
               run: >
                   uv run python scripts/generate_stats_report.py
-                  --history-db ../meta/history.duckdb
+                  --history-db ../stage-inputs/meta/history.duckdb
                   --readme ../README.md
+
+            - name: Push history database to state branch
+              run: |
+                  if git fetch --depth=1 origin state; then
+                    git worktree add ../state-worktree FETCH_HEAD --detach
+                  else
+                    git worktree add --orphan state ../state-worktree
+                  fi
+                  mkdir -p ../state-worktree/meta
+                  cp stage-inputs/meta/history.duckdb ../state-worktree/meta/history.duckdb
+                  git -C ../state-worktree add meta/history.duckdb
+                  if git -C ../state-worktree diff --cached --quiet; then
+                    echo "history database unchanged"
+                    exit 0
+                  fi
+                  git -C ../state-worktree -c user.name="github-actions[bot]" \
+                    -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+                    commit -m "chore(state): update resolver history"
+                  git -C ../state-worktree push origin HEAD:state
 
             - name: Commit and push if changed
               run: |
