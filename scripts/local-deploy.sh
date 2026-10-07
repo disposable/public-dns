@@ -258,6 +258,23 @@ run_validate_shard() {
   )
 }
 
+restore_history_from_state() {
+  local db="$ROOT_DIR/meta/history.duckdb"
+  if [[ -f "$db" ]]; then
+    return 0
+  fi
+  if git -C "$ROOT_DIR" fetch --depth=1 origin state 2>/dev/null; then
+    mkdir -p "$ROOT_DIR/meta"
+    if git -C "$ROOT_DIR" show FETCH_HEAD:meta/history.duckdb > "$db"; then
+      log "Restored history database from state branch"
+    else
+      rm -f "$db"
+    fi
+  else
+    log "No local history database and no state branch; starting with empty history"
+  fi
+}
+
 write_build_metadata() {
   local generated_at
   local repo_sha
@@ -443,6 +460,8 @@ PYEOF
         --output "$WORK_DIR/discovery/candidates.json" \
         --filtered-output "$WORK_DIR/discovery/filtered.json"
     )
+
+    restore_history_from_state
 
     log "Applying historical DNS quarantine"
     (
