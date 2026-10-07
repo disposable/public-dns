@@ -23,8 +23,8 @@ Data is refreshed by GitHub Actions:
 
 The workflow:
 
-1. `discover-and-split`: checks out this repo and the `crawler` submodule, generates and validates the probe corpus, discovers candidates, applies historical quarantine, and writes 10 shard inputs
-2. `validate-shards`: runs a 10-job matrix where each VM validates one shard with configurable per-VM validation parallelism
+1. `discover-and-split`: checks out this repo and the `crawler` submodule, generates and validates the probe corpus, discovers candidates, applies historical quarantine, and writes 30 shard inputs
+2. `validate-shards`: runs a matrix job per shard where each VM validates one shard with configurable per-VM validation parallelism
 3. `merge-and-publish`: merges validated shards, materializes generic output files, updates `meta/history.duckdb`, regenerates the README stats section, and commits changes
 
 <!-- GENERATED_STATS_START -->
