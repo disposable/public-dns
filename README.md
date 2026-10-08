@@ -57,6 +57,9 @@ Resolver candidates are gathered by the `crawler` submodule from:
 - curl wiki DoH list: <https://raw.githubusercontent.com/wiki/curl/curl/DNS-over-HTTPS.md>
 - AdGuard DNS providers list (plain DNS rows, DoH `https://`, DoT `tls://`, and DoQ `quic://` rows): <https://raw.githubusercontent.com/AdguardTeam/KnowledgeBaseDNS/master/docs/general/dns-providers.md>
 - DNSCrypt public resolvers list (`sdns://` stamps; DoH stamps enabled by default): <https://raw.githubusercontent.com/DNSCrypt/dnscrypt-resolvers/master/v3/public-resolvers.md>
+- DNSCrypt sibling lists (DoH stamps): `parental-control.md` and `opennic.md` in the same repository
+- paulmillr/encrypted-dns provider profiles (plain DNS `ServerAddresses`, DoH `https`, DoT `tls` per variant): <https://github.com/paulmillr/encrypted-dns>
+- dibdot DoH-IP blocklists (`doh-domains.txt` plus `doh-ipv4.txt`/`doh-ipv6.txt` hostname comments; DoH and DoT): <https://github.com/dibdot/DoH-IP-blocklists>
 - local manual seeds:
   - `crawler/configs/manual-dns.txt`
   - `crawler/configs/manual-doh.toml`
