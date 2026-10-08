@@ -338,6 +338,13 @@ jobs:
                   --meta-build ../meta/build.json
                   --crawler-sha-file ../stage-inputs/meta/crawler-sha.txt
 
+            - name: Generate run changelog
+              working-directory: crawler
+              run: >
+                  uv run python scripts/generate_changelog.py
+                  --history-db ../stage-inputs/meta/history.duckdb
+                  --output ../meta/changelog.json
+
             - name: Generate README statistics
               working-directory: crawler
               run: >

@@ -565,6 +565,14 @@ PYEOF
   )
   log "History database updated"
 
+  log "Generating run changelog"
+  (
+    cd crawler
+    uv run python scripts/generate_changelog.py \
+      --history-db "$ROOT_DIR/meta/history.duckdb" \
+      --output "$ROOT_DIR/meta/changelog.json"
+  )
+
   log "Generating README statistics"
   (
     cd crawler
