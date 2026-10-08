@@ -17,7 +17,7 @@ Options:
   --massdns-bin PATH              MassDNS binary path when --dns-backend=massdns (optional)
   --shards N                      Number of candidate shards to create (default: 1)
   --validate-jobs N               Number of shard validation jobs to run concurrently (default: shard count)
-  --split-json-max-bytes N        Split JSON outputs into .part files up to N bytes (default: 100000000, set 0 to disable)
+  --split-json-max-bytes N        Split JSON outputs into .part files up to N bytes (default: 40000000, set 0 to disable)
   --work-dir PATH                 Working directory for temporary stage artifacts (default: .local-deploy)
   --test-sample N                 Quick-test mode: skip discovery, sample N accepted servers from json/accepted.json
   --test-sample-file PATH         Input JSON file for --test-sample mode (default: json/accepted.json)
@@ -68,7 +68,7 @@ DNS_BACKEND="${LOCAL_DEPLOY_DNS_BACKEND:-python}"
 MASSDNS_BIN="${LOCAL_DEPLOY_MASSDNS_BIN:-}"
 SHARDS="${SHARDS:-1}"
 VALIDATE_JOBS="${VALIDATE_JOBS:-}"
-SPLIT_JSON_MAX_BYTES="${SPLIT_JSON_MAX_BYTES:-100000000}"
+SPLIT_JSON_MAX_BYTES="${SPLIT_JSON_MAX_BYTES:-40000000}"
 COMMIT_CHANGES="${LOCAL_DEPLOY_COMMIT:-0}"
 PUSH_CHANGES="${LOCAL_DEPLOY_PUSH:-0}"
 COMMIT_MESSAGE="${LOCAL_DEPLOY_COMMIT_MESSAGE:-chore(data): refresh public DNS assets}"
@@ -350,7 +350,9 @@ main() {
     else
       log "Test-sample mode: skipping corpus generation and discovery, sampling $TEST_SAMPLE servers from $TEST_SAMPLE_FILE"
     fi
-    [[ -f "$TEST_SAMPLE_FILE" ]] || die "test sample file not found: $TEST_SAMPLE_FILE"
+    if [[ ! -f "$TEST_SAMPLE_FILE" ]] && ! compgen -G "${TEST_SAMPLE_FILE%.json}.part-*.json" >/dev/null; then
+      die "test sample file not found: $TEST_SAMPLE_FILE"
+    fi
 
     if [[ -f "$ROOT_DIR/probe-corpus/probe-corpus.json" ]]; then
       cp -R "$ROOT_DIR/probe-corpus/." "$WORK_DIR/probe-corpus/"
@@ -371,8 +373,22 @@ main() {
       )
     fi
 
-    # Stash inputs before we wipe the output directories.
-    cp "$TEST_SAMPLE_FILE" "$WORK_DIR/accepted-snapshot.json"
+    # Stash inputs before we wipe the output directories. The published
+    # file may be split into .part-XXXX.json chunks - merge them if so.
+    if [[ -f "$TEST_SAMPLE_FILE" ]]; then
+      cp "$TEST_SAMPLE_FILE" "$WORK_DIR/accepted-snapshot.json"
+    else
+      mapfile -t sample_parts < <(compgen -G "${TEST_SAMPLE_FILE%.json}.part-*.json" | sort)
+      python3 - "${sample_parts[@]}" "$WORK_DIR/accepted-snapshot.json" <<'PYEOF'
+import json, sys
+records = []
+for part_path in sys.argv[1:-1]:
+    with open(part_path) as f:
+        records.extend(json.load(f))
+with open(sys.argv[-1], "w") as f:
+    json.dump(records, f)
+PYEOF
+    fi
   fi
 
   mkdir -p "$ROOT_DIR/_build" "$ROOT_DIR/json" "$ROOT_DIR/txt" "$ROOT_DIR/probe-corpus"
