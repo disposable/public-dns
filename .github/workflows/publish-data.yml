@@ -389,4 +389,17 @@ jobs:
                   fi
 
                   git commit -m "$MSG"
-                  git push
+
+                  # main may have moved while shards validated; rebase and retry
+                  for attempt in 1 2 3; do
+                    if git push origin HEAD:main; then
+                      exit 0
+                    fi
+                    if [ "$attempt" -eq 3 ]; then
+                      echo "push still rejected after $attempt attempts"
+                      exit 1
+                    fi
+                    echo "push rejected; rebasing onto latest origin/main (attempt $attempt)"
+                    git fetch origin main
+                    git rebase -X theirs origin/main
+                  done
