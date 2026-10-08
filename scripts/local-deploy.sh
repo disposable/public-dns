@@ -200,10 +200,10 @@ if [[ -n "$TEST_SAMPLE_TRANSPORTS" ]]; then
   IFS=',' read -r -a test_sample_transport_values <<<"$TEST_SAMPLE_TRANSPORTS"
   for transport in "${test_sample_transport_values[@]}"; do
     case "$transport" in
-      dns-udp|dns-tcp|doh|dot)
+      dns-udp|dns-tcp|doh|dot|doq)
         ;;
       *)
-        die "--test-sample-transports values must be dns-udp,dns-tcp,doh,dot"
+        die "--test-sample-transports values must be dns-udp,dns-tcp,doh,dot,doq"
         ;;
     esac
   done
