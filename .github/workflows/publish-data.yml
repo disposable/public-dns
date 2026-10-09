@@ -141,7 +141,7 @@ jobs:
                   uv run resolver-inventory split-candidates
                   --input ../stage-inputs/discovery/candidates.json
                   --output-dir ../stage-inputs/discovery/chunks
-                  --shards 30
+                  --shards 45
 
             - name: Write crawler SHA
               run: git -C crawler rev-parse HEAD > stage-inputs/meta/crawler-sha.txt
