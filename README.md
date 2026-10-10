@@ -86,5 +86,6 @@ For reproducible use, pin to a specific commit instead of following the latest r
 Large JSON files may be split into `*.part-XXXX.json` files to stay below repository limits. When that happens, the part files together replace the unsplit file.
 
 Each entry carries a composite `score` (0-100), a `confidence_score`, derived
-latency/history metrics, and informational `capabilities` tags - field
-details are in [HOW_IT_WORKS](HOW_IT_WORKS.md).
+latency/history metrics, and informational `capabilities` tags - field and
+scoring details are in the
+[crawler README](https://github.com/disposable/public-dns-crawler#scoring-system).
