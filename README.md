@@ -58,18 +58,15 @@ Hosts that are `rejected` for 14 consecutive daily runs are quarantined for 90 d
 
 Resolver candidates are gathered by the `crawler` submodule from:
 
-- public-dns.info nameserver CSV: <https://public-dns.info/nameservers.csv>
-- curl wiki DoH list: <https://raw.githubusercontent.com/wiki/curl/curl/DNS-over-HTTPS.md>
-- AdGuard DNS providers list (plain DNS rows, DoH `https://`, DoT `tls://`, and DoQ `quic://` rows): <https://raw.githubusercontent.com/AdguardTeam/KnowledgeBaseDNS/master/docs/general/dns-providers.md>
-- DNSCrypt public resolvers list (`sdns://` stamps; DoH stamps enabled by default): <https://raw.githubusercontent.com/DNSCrypt/dnscrypt-resolvers/master/v3/public-resolvers.md>
-- DNSCrypt sibling lists (DoH stamps): `parental-control.md` and `opennic.md` in the same repository
-- paulmillr/encrypted-dns provider profiles (plain DNS `ServerAddresses`, DoH `https`, DoT `tls` per variant): <https://github.com/paulmillr/encrypted-dns>
-- dibdot DoH-IP blocklists (`doh-domains.txt` plus `doh-ipv4.txt`/`doh-ipv6.txt` hostname comments; DoH and DoT): <https://github.com/dibdot/DoH-IP-blocklists>
-- local manual seeds:
-  - `crawler/configs/manual-dns.txt`
-  - `crawler/configs/manual-doh.toml`
-  - `crawler/configs/manual-dot.toml`
-  - `crawler/configs/manual-doq.toml`
+| Source | Provides | Status |
+|--------|----------|-------:|
+| [public-dns.info nameserver CSV](https://public-dns.info/nameservers.csv) | DNS | ![availability](https://img.shields.io/website?down_message=down&up_message=up&url=https%3A%2F%2Fpublic-dns.info%2Fnameservers.csv) |
+| [curl wiki DoH list](https://raw.githubusercontent.com/wiki/curl/curl/DNS-over-HTTPS.md) | DoH | ![GitHub last commit](https://img.shields.io/github/last-commit/curl/curl) |
+| [AdGuard DNS providers list](https://raw.githubusercontent.com/AdguardTeam/KnowledgeBaseDNS/master/docs/general/dns-providers.md) | DNS, DoH, DoT, DoQ | ![GitHub last commit](https://img.shields.io/github/last-commit/AdguardTeam/KnowledgeBaseDNS) |
+| [DNSCrypt public resolvers list](https://raw.githubusercontent.com/DNSCrypt/dnscrypt-resolvers/master/v3/public-resolvers.md) (`sdns://` stamps; incl. `parental-control.md` and `opennic.md` siblings) | DoH | ![GitHub last commit](https://img.shields.io/github/last-commit/DNSCrypt/dnscrypt-resolvers) |
+| [paulmillr/encrypted-dns provider profiles](https://github.com/paulmillr/encrypted-dns) | DNS, DoH, DoT | ![GitHub last commit](https://img.shields.io/github/last-commit/paulmillr/encrypted-dns) |
+| [dibdot DoH-IP blocklists](https://github.com/dibdot/DoH-IP-blocklists) (`doh-domains.txt` + `doh-ipv4/6.txt` hostname comments) | DoH, DoT | ![GitHub last commit](https://img.shields.io/github/last-commit/dibdot/DoH-IP-blocklists) |
+| Local manual seeds (`crawler/configs/manual-{dns,doh,dot,doq}.toml` + `manual-dns.txt`) | DNS, DoH, DoT, DoQ | - |
 
 ## Usage
 
