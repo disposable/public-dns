@@ -30,21 +30,26 @@ The workflow:
 <!-- GENERATED_STATS_START -->
 ## 30-Day Validation Stats
 
-- Latest run: `2026-10-08` (`run_id=37700062347`)
-- Runs tracked: `1`
-- Latest totals: `3261` accepted, `600` candidate, `119173` rejected, `2856` filtered
-- 30-day trend: accepted `+3261`, rejected `+119173`
+- Latest run: `2026-10-10` (`run_id=38004588441`)
+- Runs tracked: `3`
+- Latest totals: `4394` accepted, `656` candidate, `120935` rejected, `3831` filtered
+- 30-day trend: accepted `+1318`, rejected `+1551`
 - Currently quarantined DNS hosts: `0`
+
+### Latest Run Changes
+
+- Compared to `2026-10-08`: `+2951` new, `-0` removed, `2603` status changes
+- Status transitions: rejected->accepted `1182`, accepted->rejected `563`, rejected->candidate `335`, candidate->rejected `270`, candidate->accepted `130`, accepted->candidate `123`
 
 ### Top Rejection Reasons
 
 | Reason | Count |
 | --- | ---: |
-| `timeout_or_error` | 117872 |
-| `timeout_rate_high` | 115602 |
-| `no_latency_samples` | 114993 |
-| `udp_only` | 61380 |
-| `latency_moderate` | 3389 |
+| `timeout_or_error` | 236525 |
+| `timeout_rate_high` | 232376 |
+| `no_latency_samples` | 231062 |
+| `udp_only` | 122908 |
+| `latency_moderate` | 7324 |
 
 Hosts that are `rejected` for 14 consecutive daily runs are quarantined for 90 days before they are tested again.
 <!-- GENERATED_STATS_END -->

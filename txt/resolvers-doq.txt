@@ -1,0 +1,3 @@
+quic://94.140.14.14#dns.adguard-dns.com
+quic://94.140.15.15#dns.adguard-dns.com
+quic://dns.dnsguard.pub
