@@ -212,3 +212,4 @@ _build/
 
 # Resolver history database lives on the `state` orphan branch
 /meta/history.duckdb
+/meta/history.duckdb.zst

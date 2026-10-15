@@ -265,7 +265,10 @@ restore_history_from_state() {
   fi
   if git -C "$ROOT_DIR" fetch --depth=1 origin state 2>/dev/null; then
     mkdir -p "$ROOT_DIR/meta"
-    if git -C "$ROOT_DIR" show FETCH_HEAD:meta/history.duckdb > "$db"; then
+    if git -C "$ROOT_DIR" cat-file -e FETCH_HEAD:meta/history.duckdb.zst 2>/dev/null \
+      && git -C "$ROOT_DIR" show FETCH_HEAD:meta/history.duckdb.zst | zstd -dc > "$db"; then
+      log "Restored history database from state branch"
+    elif git -C "$ROOT_DIR" show FETCH_HEAD:meta/history.duckdb > "$db"; then
       log "Restored history database from state branch"
     else
       rm -f "$db"

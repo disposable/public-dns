@@ -110,7 +110,11 @@ jobs:
               run: |
                   mkdir -p meta
                   if git fetch --depth=1 origin state; then
-                    git show FETCH_HEAD:meta/history.duckdb > meta/history.duckdb || rm -f meta/history.duckdb
+                    if git cat-file -e FETCH_HEAD:meta/history.duckdb.zst 2>/dev/null; then
+                      git show FETCH_HEAD:meta/history.duckdb.zst | zstd -dc > meta/history.duckdb
+                    else
+                      git show FETCH_HEAD:meta/history.duckdb > meta/history.duckdb || rm -f meta/history.duckdb
+                    fi
                   else
                     echo "state branch not found; starting with empty history"
                   fi
@@ -360,8 +364,9 @@ jobs:
                     git worktree add --orphan state ../state-worktree
                   fi
                   mkdir -p ../state-worktree/meta
-                  cp stage-inputs/meta/history.duckdb ../state-worktree/meta/history.duckdb
-                  git -C ../state-worktree add meta/history.duckdb
+                  zstd -19 -f stage-inputs/meta/history.duckdb -o ../state-worktree/meta/history.duckdb.zst
+                  rm -f ../state-worktree/meta/history.duckdb
+                  git -C ../state-worktree add -A meta
                   if git -C ../state-worktree diff --cached --quiet; then
                     echo "history database unchanged"
                     exit 0
