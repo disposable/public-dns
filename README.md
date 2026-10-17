@@ -26,26 +26,26 @@ reproduction steps.
 <!-- GENERATED_STATS_START -->
 ## 30-Day Validation Stats
 
-- Latest run: `2026-10-16` (`run_id=38865419151`)
-- Runs tracked: `8`
-- Latest totals: `4157` accepted, `566` candidate, `121205` rejected, `3589` filtered
-- 30-day trend: accepted `+151`, rejected `-232`
+- Latest run: `2026-10-17` (`run_id=39011822302`)
+- Runs tracked: `9`
+- Latest totals: `4281` accepted, `664` candidate, `121009` rejected, `3832` filtered
+- 30-day trend: accepted `+124`, rejected `-196`
 - Currently quarantined DNS hosts: `0`
 
 ### Latest Run Changes
 
-- Compared to `2026-10-15`: `+7` new, `-65` removed, `1573` status changes
-- Status transitions: rejected->accepted `442`, accepted->rejected `348`, rejected->candidate `292`, candidate->rejected `212`, candidate->accepted `168`, accepted->candidate `111`
+- Compared to `2026-10-16`: `+39` new, `-13` removed, `1712` status changes
+- Status transitions: rejected->accepted `468`, accepted->rejected `358`, rejected->candidate `357`, candidate->rejected `244`, candidate->accepted `150`, accepted->candidate `135`
 
 ### Top Rejection Reasons
 
 | Reason | Count |
 | --- | ---: |
-| `timeout_or_error` | 593536 |
-| `timeout_rate_high` | 582994 |
-| `no_latency_samples` | 579347 |
-| `udp_only` | 307472 |
-| `latency_moderate` | 19575 |
+| `timeout_or_error` | 712638 |
+| `timeout_rate_high` | 699155 |
+| `no_latency_samples` | 695293 |
+| `udp_only` | 369001 |
+| `latency_moderate` | 23462 |
 
 Hosts that are `rejected` for 14 consecutive daily runs are quarantined for 90 days before they are tested again.
 <!-- GENERATED_STATS_END -->
