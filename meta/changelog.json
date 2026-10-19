@@ -1,1033 +1,1038 @@
 {
-  "run_id": "39106890350_2026-10-18T09:54:56+00:00",
-  "run_date": "2026-10-18",
-  "previous_run_id": "39011822302_2026-10-17T09:37:48+00:00",
-  "previous_run_date": "2026-10-17",
-  "added_count": 3,
+  "run_id": "39218126696_2026-10-19T10:29:43+00:00",
+  "run_date": "2026-10-19",
+  "previous_run_id": "39106890350_2026-10-18T09:54:56+00:00",
+  "previous_run_date": "2026-10-18",
+  "added_count": 12,
   "added": [
-    "doh|https://bestwon203.com/dns-query",
-    "dot|bestwon203.com|853",
-    "dot|dns.simplylinux.ch|853"
-  ],
-  "removed_count": 6,
-  "removed": [
+    "doh|https://3dcosas.xyz/dns-query",
     "doh|https://adguard.bonsirven.eu/dns-query",
-    "doh|https://dns.pernika.net/dns-query",
+    "doh|https://dns.dyn1.de/dns-query",
+    "doh|https://lukscasino-929-tr.xyz/dns-query",
     "doh|https://mendozasdelivery.com/dns-query",
+    "doh|https://tuskythehusky.tech/dns-query",
+    "dot|3dcosas.xyz|853",
     "dot|adguard.bonsirven.eu|853",
-    "dot|dns.pernika.net|853",
-    "dot|mendozasdelivery.com|853"
+    "dot|dns.dyn1.de|853",
+    "dot|lukscasino-929-tr.xyz|853",
+    "dot|mendozasdelivery.com|853",
+    "dot|tuskythehusky.tech|853"
+  ],
+  "removed_count": 2,
+  "removed": [
+    "doh|https://adguard.marto.si/dns-query",
+    "dot|adguard.marto.si|853"
   ],
   "transition_counts": {
-    "accepted->rejected": 479,
-    "rejected->accepted": 372,
-    "candidate->rejected": 346,
-    "rejected->candidate": 245,
-    "accepted->candidate": 171,
-    "candidate->accepted": 128
+    "rejected->accepted": 429,
+    "accepted->rejected": 402,
+    "rejected->candidate": 356,
+    "candidate->rejected": 264,
+    "candidate->accepted": 171,
+    "accepted->candidate": 164
   },
   "status_changes": [
     {
-      "resolver": "dns-tcp|1.0.212.108|53",
-      "from": "accepted",
-      "to": "rejected"
-    },
-    {
       "resolver": "dns-tcp|1.1.230.13|53",
-      "from": "rejected",
-      "to": "accepted"
+      "from": "accepted",
+      "to": "candidate"
     },
     {
-      "resolver": "dns-tcp|1.229.71.72|53",
+      "resolver": "dns-tcp|1.209.148.129|53",
       "from": "candidate",
       "to": "rejected"
     },
     {
       "resolver": "dns-tcp|1.234.31.2|53",
-      "from": "rejected",
-      "to": "candidate"
+      "from": "candidate",
+      "to": "rejected"
     },
     {
-      "resolver": "dns-tcp|1.234.79.82|53",
+      "resolver": "dns-tcp|1.246.219.171|53",
       "from": "accepted",
       "to": "rejected"
     },
     {
       "resolver": "dns-tcp|1.4.144.145|53",
-      "from": "rejected",
-      "to": "candidate"
+      "from": "candidate",
+      "to": "accepted"
     },
     {
-      "resolver": "dns-tcp|1.4.164.85|53",
+      "resolver": "dns-tcp|1.4.173.114|53",
       "from": "rejected",
       "to": "accepted"
     },
     {
       "resolver": "dns-tcp|1.53.34.29|53",
+      "from": "candidate",
+      "to": "accepted"
+    },
+    {
+      "resolver": "dns-tcp|1.9.63.100|53",
+      "from": "candidate",
+      "to": "rejected"
+    },
+    {
+      "resolver": "dns-tcp|1.9.63.101|53",
       "from": "accepted",
       "to": "candidate"
     },
     {
-      "resolver": "dns-tcp|1.9.63.101|53",
-      "from": "rejected",
+      "resolver": "dns-tcp|101.226.4.6|53",
+      "from": "candidate",
       "to": "accepted"
     },
     {
-      "resolver": "dns-tcp|102.133.139.27|53",
+      "resolver": "dns-tcp|102.131.64.37|53",
       "from": "rejected",
       "to": "candidate"
     },
     {
       "resolver": "dns-tcp|102.214.119.2|53",
-      "from": "accepted",
-      "to": "candidate"
-    },
-    {
-      "resolver": "dns-tcp|102.216.223.14|53",
-      "from": "rejected",
-      "to": "candidate"
-    },
-    {
-      "resolver": "dns-tcp|103.105.253.50|53",
       "from": "candidate",
       "to": "rejected"
     },
     {
+      "resolver": "dns-tcp|102.216.223.14|53",
+      "from": "candidate",
+      "to": "rejected"
+    },
+    {
+      "resolver": "dns-tcp|102.218.172.222|53",
+      "from": "rejected",
+      "to": "candidate"
+    },
+    {
       "resolver": "dns-tcp|103.108.9.205|53",
+      "from": "accepted",
+      "to": "candidate"
+    },
+    {
+      "resolver": "dns-tcp|103.109.39.79|53",
+      "from": "accepted",
+      "to": "candidate"
+    },
+    {
+      "resolver": "dns-tcp|103.110.8.142|53",
+      "from": "rejected",
+      "to": "candidate"
+    },
+    {
+      "resolver": "dns-tcp|103.120.111.2|53",
+      "from": "rejected",
+      "to": "candidate"
+    },
+    {
+      "resolver": "dns-tcp|103.121.228.5|53",
       "from": "rejected",
       "to": "accepted"
     },
     {
-      "resolver": "dns-tcp|103.120.111.2|53",
-      "from": "candidate",
-      "to": "rejected"
-    },
-    {
-      "resolver": "dns-tcp|103.121.228.5|53",
-      "from": "accepted",
-      "to": "rejected"
-    },
-    {
-      "resolver": "dns-tcp|103.132.242.59|53",
-      "from": "rejected",
-      "to": "candidate"
-    },
-    {
       "resolver": "dns-tcp|103.137.156.3|53",
-      "from": "accepted",
-      "to": "rejected"
+      "from": "rejected",
+      "to": "accepted"
     },
     {
-      "resolver": "dns-tcp|103.138.51.141|53",
+      "resolver": "dns-tcp|103.138.121.112|53",
       "from": "accepted",
       "to": "rejected"
     },
     {
       "resolver": "dns-tcp|103.138.70.197|53",
-      "from": "rejected",
-      "to": "candidate"
+      "from": "candidate",
+      "to": "rejected"
+    },
+    {
+      "resolver": "dns-tcp|103.139.196.101|53",
+      "from": "accepted",
+      "to": "rejected"
     },
     {
       "resolver": "dns-tcp|103.139.196.103|53",
-      "from": "accepted",
-      "to": "rejected"
+      "from": "rejected",
+      "to": "accepted"
     },
     {
       "resolver": "dns-tcp|103.143.139.225|53",
-      "from": "accepted",
-      "to": "rejected"
-    },
-    {
-      "resolver": "dns-tcp|103.143.139.68|53",
-      "from": "candidate",
+      "from": "rejected",
       "to": "accepted"
     },
     {
       "resolver": "dns-tcp|103.143.139.70|53",
+      "from": "rejected",
+      "to": "accepted"
+    },
+    {
+      "resolver": "dns-tcp|103.145.164.14|53",
+      "from": "accepted",
+      "to": "candidate"
+    },
+    {
+      "resolver": "dns-tcp|103.145.164.162|53",
+      "from": "accepted",
+      "to": "rejected"
+    },
+    {
+      "resolver": "dns-tcp|103.145.164.18|53",
       "from": "accepted",
       "to": "rejected"
     },
     {
       "resolver": "dns-tcp|103.145.164.218|53",
+      "from": "candidate",
+      "to": "rejected"
+    },
+    {
+      "resolver": "dns-tcp|103.145.165.116|53",
       "from": "accepted",
       "to": "candidate"
     },
     {
       "resolver": "dns-tcp|103.145.165.196|53",
+      "from": "candidate",
+      "to": "accepted"
+    },
+    {
+      "resolver": "dns-tcp|103.145.165.206|53",
       "from": "accepted",
-      "to": "candidate"
+      "to": "rejected"
     },
     {
       "resolver": "dns-tcp|103.145.165.235|53",
-      "from": "accepted",
-      "to": "candidate"
-    },
-    {
-      "resolver": "dns-tcp|103.145.36.151|53",
       "from": "candidate",
       "to": "accepted"
-    },
-    {
-      "resolver": "dns-tcp|103.148.130.112|53",
-      "from": "candidate",
-      "to": "rejected"
     },
     {
       "resolver": "dns-tcp|103.152.238.212|53",
+      "from": "candidate",
+      "to": "rejected"
+    },
+    {
+      "resolver": "dns-tcp|103.153.66.34|53",
+      "from": "rejected",
+      "to": "accepted"
+    },
+    {
+      "resolver": "dns-tcp|103.154.16.148|53",
+      "from": "rejected",
+      "to": "accepted"
+    },
+    {
+      "resolver": "dns-tcp|103.154.16.208|53",
+      "from": "rejected",
+      "to": "accepted"
+    },
+    {
+      "resolver": "dns-tcp|103.154.16.32|53",
+      "from": "rejected",
+      "to": "accepted"
+    },
+    {
+      "resolver": "dns-tcp|103.154.16.34|53",
+      "from": "rejected",
+      "to": "accepted"
+    },
+    {
+      "resolver": "dns-tcp|103.156.14.138|53",
+      "from": "rejected",
+      "to": "accepted"
+    },
+    {
+      "resolver": "dns-tcp|103.156.75.132|53",
+      "from": "candidate",
+      "to": "accepted"
+    },
+    {
+      "resolver": "dns-tcp|103.156.86.29|53",
       "from": "rejected",
       "to": "candidate"
     },
     {
-      "resolver": "dns-tcp|103.155.174.113|53",
-      "from": "rejected",
-      "to": "accepted"
-    },
-    {
-      "resolver": "dns-tcp|103.161.42.2|53",
+      "resolver": "dns-tcp|103.159.195.156|53",
       "from": "accepted",
       "to": "rejected"
     },
     {
-      "resolver": "dns-tcp|103.162.1.65|53",
-      "from": "rejected",
-      "to": "accepted"
+      "resolver": "dns-tcp|103.159.195.40|53",
+      "from": "accepted",
+      "to": "rejected"
     },
     {
-      "resolver": "dns-tcp|103.165.154.1|53",
+      "resolver": "dns-tcp|103.161.31.137|53",
+      "from": "rejected",
+      "to": "candidate"
+    },
+    {
+      "resolver": "dns-tcp|103.161.42.2|53",
+      "from": "rejected",
+      "to": "candidate"
+    },
+    {
+      "resolver": "dns-tcp|103.164.222.243|53",
       "from": "candidate",
       "to": "accepted"
     },
     {
       "resolver": "dns-tcp|103.166.27.35|53",
-      "from": "rejected",
-      "to": "accepted"
+      "from": "accepted",
+      "to": "rejected"
     },
     {
-      "resolver": "dns-tcp|103.169.189.160|53",
+      "resolver": "dns-tcp|103.168.181.177|53",
       "from": "candidate",
       "to": "rejected"
     },
     {
       "resolver": "dns-tcp|103.17.176.115|53",
-      "from": "accepted",
+      "from": "rejected",
+      "to": "accepted"
+    },
+    {
+      "resolver": "dns-tcp|103.172.172.51|53",
+      "from": "candidate",
       "to": "rejected"
     },
     {
-      "resolver": "dns-tcp|103.17.177.112|53",
-      "from": "rejected",
-      "to": "accepted"
-    },
-    {
-      "resolver": "dns-tcp|103.17.177.147|53",
-      "from": "rejected",
-      "to": "accepted"
-    },
-    {
-      "resolver": "dns-tcp|103.17.177.172|53",
-      "from": "rejected",
-      "to": "accepted"
-    },
-    {
-      "resolver": "dns-tcp|103.17.177.199|53",
-      "from": "rejected",
-      "to": "accepted"
-    },
-    {
-      "resolver": "dns-tcp|103.17.177.223|53",
-      "from": "rejected",
-      "to": "accepted"
-    },
-    {
-      "resolver": "dns-tcp|103.17.177.36|53",
-      "from": "rejected",
-      "to": "accepted"
-    },
-    {
-      "resolver": "dns-tcp|103.17.177.39|53",
-      "from": "rejected",
-      "to": "accepted"
-    },
-    {
-      "resolver": "dns-tcp|103.17.177.43|53",
-      "from": "rejected",
-      "to": "accepted"
-    },
-    {
-      "resolver": "dns-tcp|103.17.177.62|53",
-      "from": "rejected",
-      "to": "accepted"
-    },
-    {
-      "resolver": "dns-tcp|103.17.177.70|53",
-      "from": "rejected",
-      "to": "accepted"
-    },
-    {
-      "resolver": "dns-tcp|103.17.177.73|53",
-      "from": "rejected",
-      "to": "accepted"
-    },
-    {
-      "resolver": "dns-tcp|103.17.177.98|53",
+      "resolver": "dns-tcp|103.173.106.143|53",
       "from": "rejected",
       "to": "accepted"
     },
     {
       "resolver": "dns-tcp|103.173.106.176|53",
-      "from": "rejected",
-      "to": "accepted"
-    },
-    {
-      "resolver": "dns-tcp|103.173.106.181|53",
       "from": "accepted",
       "to": "rejected"
     },
     {
       "resolver": "dns-tcp|103.173.106.182|53",
+      "from": "accepted",
+      "to": "rejected"
+    },
+    {
+      "resolver": "dns-tcp|103.173.106.187|53",
       "from": "rejected",
       "to": "accepted"
     },
     {
       "resolver": "dns-tcp|103.173.106.195|53",
+      "from": "accepted",
+      "to": "rejected"
+    },
+    {
+      "resolver": "dns-tcp|103.173.106.196|53",
+      "from": "rejected",
+      "to": "accepted"
+    },
+    {
+      "resolver": "dns-tcp|103.173.106.19|53",
       "from": "rejected",
       "to": "accepted"
     },
     {
       "resolver": "dns-tcp|103.173.106.208|53",
-      "from": "accepted",
-      "to": "rejected"
-    },
-    {
-      "resolver": "dns-tcp|103.173.106.233|53",
-      "from": "accepted",
-      "to": "rejected"
-    },
-    {
-      "resolver": "dns-tcp|103.173.106.245|53",
       "from": "rejected",
       "to": "accepted"
     },
     {
-      "resolver": "dns-tcp|103.173.106.59|53",
+      "resolver": "dns-tcp|103.173.106.231|53",
+      "from": "rejected",
+      "to": "accepted"
+    },
+    {
+      "resolver": "dns-tcp|103.173.106.242|53",
+      "from": "rejected",
+      "to": "candidate"
+    },
+    {
+      "resolver": "dns-tcp|103.173.106.245|53",
+      "from": "accepted",
+      "to": "rejected"
+    },
+    {
+      "resolver": "dns-tcp|103.173.106.47|53",
       "from": "rejected",
       "to": "accepted"
     },
     {
       "resolver": "dns-tcp|103.173.106.70|53",
-      "from": "rejected",
-      "to": "candidate"
+      "from": "candidate",
+      "to": "accepted"
     },
     {
-      "resolver": "dns-tcp|103.175.238.25|53",
+      "resolver": "dns-tcp|103.173.106.86|53",
+      "from": "rejected",
+      "to": "accepted"
+    },
+    {
+      "resolver": "dns-tcp|103.173.106.90|53",
+      "from": "rejected",
+      "to": "accepted"
+    },
+    {
+      "resolver": "dns-tcp|103.173.106.98|53",
+      "from": "rejected",
+      "to": "accepted"
+    },
+    {
+      "resolver": "dns-tcp|103.175.238.154|53",
       "from": "rejected",
       "to": "candidate"
     },
     {
       "resolver": "dns-tcp|103.178.72.161|53",
-      "from": "accepted",
-      "to": "rejected"
-    },
-    {
-      "resolver": "dns-tcp|103.178.72.183|53",
-      "from": "accepted",
-      "to": "rejected"
-    },
-    {
-      "resolver": "dns-tcp|103.178.72.238|53",
       "from": "rejected",
       "to": "accepted"
     },
     {
-      "resolver": "dns-tcp|103.178.72.47|53",
+      "resolver": "dns-tcp|103.178.73.155|53",
+      "from": "accepted",
+      "to": "rejected"
+    },
+    {
+      "resolver": "dns-tcp|103.178.73.158|53",
       "from": "accepted",
       "to": "rejected"
     },
     {
       "resolver": "dns-tcp|103.178.73.160|53",
-      "from": "rejected",
-      "to": "accepted"
+      "from": "accepted",
+      "to": "rejected"
     },
     {
       "resolver": "dns-tcp|103.178.73.178|53",
-      "from": "rejected",
-      "to": "accepted"
+      "from": "accepted",
+      "to": "rejected"
     },
     {
-      "resolver": "dns-tcp|103.178.73.189|53",
+      "resolver": "dns-tcp|103.178.73.19|53",
       "from": "accepted",
       "to": "rejected"
     },
     {
       "resolver": "dns-tcp|103.178.73.224|53",
-      "from": "rejected",
-      "to": "accepted"
+      "from": "accepted",
+      "to": "rejected"
     },
     {
       "resolver": "dns-tcp|103.178.73.235|53",
-      "from": "rejected",
-      "to": "accepted"
+      "from": "accepted",
+      "to": "rejected"
     },
     {
       "resolver": "dns-tcp|103.178.73.245|53",
-      "from": "accepted",
-      "to": "rejected"
-    },
-    {
-      "resolver": "dns-tcp|103.178.73.249|53",
-      "from": "accepted",
-      "to": "candidate"
-    },
-    {
-      "resolver": "dns-tcp|103.178.73.27|53",
-      "from": "rejected",
-      "to": "candidate"
-    },
-    {
-      "resolver": "dns-tcp|103.178.73.51|53",
       "from": "rejected",
       "to": "accepted"
     },
     {
-      "resolver": "dns-tcp|103.178.73.54|53",
+      "resolver": "dns-tcp|103.178.73.249|53",
       "from": "candidate",
-      "to": "rejected"
+      "to": "accepted"
     },
     {
-      "resolver": "dns-tcp|103.178.73.58|53",
+      "resolver": "dns-tcp|103.178.73.57|53",
       "from": "accepted",
       "to": "rejected"
     },
     {
       "resolver": "dns-tcp|103.178.73.59|53",
+      "from": "candidate",
+      "to": "rejected"
+    },
+    {
+      "resolver": "dns-tcp|103.178.73.6|53",
       "from": "rejected",
-      "to": "candidate"
+      "to": "accepted"
     },
     {
       "resolver": "dns-tcp|103.178.73.74|53",
-      "from": "accepted",
+      "from": "rejected",
+      "to": "accepted"
+    },
+    {
+      "resolver": "dns-tcp|103.18.138.20|53",
+      "from": "candidate",
       "to": "rejected"
     },
     {
       "resolver": "dns-tcp|103.180.52.136|53",
-      "from": "accepted",
-      "to": "rejected"
-    },
-    {
-      "resolver": "dns-tcp|103.185.225.49|53",
-      "from": "candidate",
-      "to": "accepted"
-    },
-    {
-      "resolver": "dns-tcp|103.186.52.201|53",
       "from": "rejected",
       "to": "accepted"
     },
     {
-      "resolver": "dns-tcp|103.186.52.22|53",
+      "resolver": "dns-tcp|103.186.52.187|53",
+      "from": "accepted",
+      "to": "rejected"
+    },
+    {
+      "resolver": "dns-tcp|103.186.52.19|53",
+      "from": "accepted",
+      "to": "rejected"
+    },
+    {
+      "resolver": "dns-tcp|103.186.52.201|53",
+      "from": "accepted",
+      "to": "rejected"
+    },
+    {
+      "resolver": "dns-tcp|103.186.52.249|53",
       "from": "accepted",
       "to": "rejected"
     },
     {
       "resolver": "dns-tcp|103.186.52.49|53",
-      "from": "rejected",
-      "to": "accepted"
+      "from": "accepted",
+      "to": "rejected"
     },
     {
       "resolver": "dns-tcp|103.186.52.8|53",
+      "from": "accepted",
+      "to": "rejected"
+    },
+    {
+      "resolver": "dns-tcp|103.186.52.99|53",
       "from": "rejected",
       "to": "accepted"
     },
     {
-      "resolver": "dns-tcp|103.186.52.99|53",
+      "resolver": "dns-tcp|103.187.98.221|53",
       "from": "accepted",
       "to": "rejected"
     },
     {
       "resolver": "dns-tcp|103.191.158.32|53",
-      "from": "rejected",
-      "to": "accepted"
-    },
-    {
-      "resolver": "dns-tcp|103.20.152.11|53",
       "from": "accepted",
       "to": "rejected"
     },
     {
-      "resolver": "dns-tcp|103.202.221.149|53",
+      "resolver": "dns-tcp|103.20.152.11|53",
+      "from": "rejected",
+      "to": "candidate"
+    },
+    {
+      "resolver": "dns-tcp|103.202.221.12|53",
       "from": "accepted",
       "to": "rejected"
     },
     {
       "resolver": "dns-tcp|103.202.221.163|53",
+      "from": "accepted",
+      "to": "rejected"
+    },
+    {
+      "resolver": "dns-tcp|103.202.221.178|53",
+      "from": "rejected",
+      "to": "candidate"
+    },
+    {
+      "resolver": "dns-tcp|103.202.221.200|53",
       "from": "rejected",
       "to": "accepted"
     },
     {
-      "resolver": "dns-tcp|103.202.221.200|53",
-      "from": "accepted",
+      "resolver": "dns-tcp|103.202.221.210|53",
+      "from": "candidate",
       "to": "rejected"
     },
     {
-      "resolver": "dns-tcp|103.202.221.210|53",
+      "resolver": "dns-tcp|103.202.221.53|53",
+      "from": "rejected",
+      "to": "accepted"
+    },
+    {
+      "resolver": "dns-tcp|103.228.35.43|53",
+      "from": "rejected",
+      "to": "candidate"
+    },
+    {
+      "resolver": "dns-tcp|103.230.182.14|53",
+      "from": "candidate",
+      "to": "accepted"
+    },
+    {
+      "resolver": "dns-tcp|103.230.182.17|53",
+      "from": "rejected",
+      "to": "accepted"
+    },
+    {
+      "resolver": "dns-tcp|103.239.32.36|53",
       "from": "accepted",
       "to": "candidate"
     },
     {
-      "resolver": "dns-tcp|103.202.221.53|53",
-      "from": "accepted",
-      "to": "rejected"
-    },
-    {
-      "resolver": "dns-tcp|103.230.182.17|53",
-      "from": "accepted",
-      "to": "rejected"
-    },
-    {
-      "resolver": "dns-tcp|103.230.182.196|53",
-      "from": "candidate",
+      "resolver": "dns-tcp|103.241.181.28|53",
+      "from": "rejected",
       "to": "accepted"
     },
     {
       "resolver": "dns-tcp|103.28.114.35|53",
-      "from": "rejected",
-      "to": "candidate"
-    },
-    {
-      "resolver": "dns-tcp|103.29.142.35|53",
-      "from": "accepted",
-      "to": "rejected"
-    },
-    {
-      "resolver": "dns-tcp|103.48.207.78|53",
       "from": "candidate",
       "to": "rejected"
     },
     {
-      "resolver": "dns-tcp|103.6.250.60|53",
-      "from": "accepted",
-      "to": "rejected"
-    },
-    {
-      "resolver": "dns-tcp|103.6.251.146|53",
+      "resolver": "dns-tcp|103.6.250.177|53",
       "from": "rejected",
       "to": "accepted"
     },
     {
-      "resolver": "dns-tcp|103.6.251.159|53",
+      "resolver": "dns-tcp|103.6.250.198|53",
+      "from": "accepted",
+      "to": "rejected"
+    },
+    {
+      "resolver": "dns-tcp|103.6.250.60|53",
+      "from": "rejected",
+      "to": "accepted"
+    },
+    {
+      "resolver": "dns-tcp|103.6.251.146|53",
+      "from": "accepted",
+      "to": "rejected"
+    },
+    {
+      "resolver": "dns-tcp|103.6.251.16|53",
       "from": "accepted",
       "to": "rejected"
     },
     {
       "resolver": "dns-tcp|103.6.251.226|53",
-      "from": "accepted",
-      "to": "rejected"
-    },
-    {
-      "resolver": "dns-tcp|103.6.251.40|53",
-      "from": "accepted",
-      "to": "rejected"
-    },
-    {
-      "resolver": "dns-tcp|103.65.214.162|53",
       "from": "rejected",
       "to": "accepted"
     },
     {
+      "resolver": "dns-tcp|103.65.214.162|53",
+      "from": "accepted",
+      "to": "rejected"
+    },
+    {
       "resolver": "dns-tcp|103.74.11.135|53",
+      "from": "rejected",
+      "to": "accepted"
+    },
+    {
+      "resolver": "dns-tcp|103.74.230.32|53",
       "from": "accepted",
       "to": "rejected"
     },
     {
       "resolver": "dns-tcp|103.79.156.70|53",
-      "from": "rejected",
-      "to": "candidate"
-    },
-    {
-      "resolver": "dns-tcp|103.84.119.172|53",
-      "from": "rejected",
-      "to": "accepted"
+      "from": "candidate",
+      "to": "rejected"
     },
     {
       "resolver": "dns-tcp|103.84.119.192|53",
-      "from": "accepted",
-      "to": "candidate"
+      "from": "candidate",
+      "to": "rejected"
     },
     {
-      "resolver": "dns-tcp|103.92.204.139|53",
+      "resolver": "dns-tcp|103.92.204.128|53",
       "from": "accepted",
       "to": "rejected"
     },
     {
-      "resolver": "dns-tcp|103.95.148.6|53",
+      "resolver": "dns-tcp|103.92.204.139|53",
+      "from": "rejected",
+      "to": "accepted"
+    },
+    {
+      "resolver": "dns-tcp|103.92.206.130|53",
+      "from": "accepted",
+      "to": "rejected"
+    },
+    {
+      "resolver": "dns-tcp|103.92.206.255|53",
+      "from": "accepted",
+      "to": "rejected"
+    },
+    {
+      "resolver": "dns-tcp|103.92.206.63|53",
+      "from": "accepted",
+      "to": "rejected"
+    },
+    {
+      "resolver": "dns-tcp|103.92.207.24|53",
       "from": "accepted",
       "to": "rejected"
     },
     {
       "resolver": "dns-tcp|104.251.184.193|53",
-      "from": "rejected",
-      "to": "candidate"
+      "from": "candidate",
+      "to": "rejected"
     },
     {
-      "resolver": "dns-tcp|105.30.247.93|53",
+      "resolver": "dns-tcp|109.104.216.20|53",
       "from": "accepted",
-      "to": "candidate"
+      "to": "rejected"
     },
     {
       "resolver": "dns-tcp|109.105.40.34|53",
-      "from": "rejected",
-      "to": "candidate"
+      "from": "candidate",
+      "to": "rejected"
     },
     {
-      "resolver": "dns-tcp|109.105.45.30|53",
-      "from": "rejected",
+      "resolver": "dns-tcp|109.105.45.31|53",
+      "from": "accepted",
       "to": "candidate"
     },
     {
       "resolver": "dns-tcp|109.124.76.206|53",
-      "from": "accepted",
-      "to": "candidate"
-    },
-    {
-      "resolver": "dns-tcp|109.167.133.51|53",
-      "from": "accepted",
-      "to": "candidate"
+      "from": "candidate",
+      "to": "accepted"
     },
     {
       "resolver": "dns-tcp|109.167.230.243|53",
-      "from": "candidate",
-      "to": "accepted"
+      "from": "accepted",
+      "to": "candidate"
     },
     {
       "resolver": "dns-tcp|109.167.244.14|53",
-      "from": "candidate",
-      "to": "rejected"
-    },
-    {
-      "resolver": "dns-tcp|109.172.176.58|53",
       "from": "rejected",
       "to": "candidate"
     },
     {
-      "resolver": "dns-tcp|109.203.100.192|53",
+      "resolver": "dns-tcp|109.172.176.58|53",
       "from": "candidate",
-      "to": "accepted"
+      "to": "rejected"
     },
     {
-      "resolver": "dns-tcp|109.228.1.132|53",
+      "resolver": "dns-tcp|109.195.100.225|53",
+      "from": "rejected",
+      "to": "candidate"
+    },
+    {
+      "resolver": "dns-tcp|109.197.71.34|53",
+      "from": "candidate",
+      "to": "rejected"
+    },
+    {
+      "resolver": "dns-tcp|109.203.100.192|53",
+      "from": "accepted",
+      "to": "candidate"
+    },
+    {
+      "resolver": "dns-tcp|109.235.216.5|53",
+      "from": "rejected",
+      "to": "candidate"
+    },
+    {
+      "resolver": "dns-tcp|109.68.15.212|53",
+      "from": "rejected",
+      "to": "candidate"
+    },
+    {
+      "resolver": "dns-tcp|110.77.136.146|53",
       "from": "accepted",
       "to": "rejected"
     },
     {
-      "resolver": "dns-tcp|109.68.15.212|53",
-      "from": "candidate",
-      "to": "rejected"
-    },
-    {
-      "resolver": "dns-tcp|110.77.136.146|53",
+      "resolver": "dns-tcp|110.77.140.161|53",
       "from": "rejected",
       "to": "accepted"
     },
     {
-      "resolver": "dns-tcp|110.77.140.161|53",
-      "from": "candidate",
-      "to": "rejected"
-    },
-    {
-      "resolver": "dns-tcp|110.78.18.44|53",
-      "from": "candidate",
-      "to": "rejected"
-    },
-    {
-      "resolver": "dns-tcp|111.118.147.236|53",
+      "resolver": "dns-tcp|111.118.223.243|53",
       "from": "accepted",
       "to": "rejected"
     },
     {
       "resolver": "dns-tcp|111.68.108.200|53",
-      "from": "candidate",
-      "to": "accepted"
-    },
-    {
-      "resolver": "dns-tcp|111.68.108.215|53",
-      "from": "candidate",
-      "to": "rejected"
+      "from": "accepted",
+      "to": "candidate"
     },
     {
       "resolver": "dns-tcp|112.199.115.40|53",
-      "from": "candidate",
-      "to": "rejected"
+      "from": "rejected",
+      "to": "accepted"
     },
     {
       "resolver": "dns-tcp|113.161.180.214|53",
-      "from": "candidate",
-      "to": "rejected"
-    },
-    {
-      "resolver": "dns-tcp|113.161.230.19|53",
-      "from": "accepted",
-      "to": "rejected"
-    },
-    {
-      "resolver": "dns-tcp|113.176.7.202|53",
-      "from": "accepted",
-      "to": "rejected"
+      "from": "rejected",
+      "to": "candidate"
     },
     {
       "resolver": "dns-tcp|114.130.5.5|53",
-      "from": "candidate",
-      "to": "accepted"
-    },
-    {
-      "resolver": "dns-tcp|114.79.144.95|53",
-      "from": "rejected",
-      "to": "accepted"
-    },
-    {
-      "resolver": "dns-tcp|115.243.102.142|53",
       "from": "accepted",
       "to": "rejected"
     },
     {
-      "resolver": "dns-tcp|116.118.119.167|53",
+      "resolver": "dns-tcp|114.143.91.103|53",
+      "from": "rejected",
+      "to": "accepted"
+    },
+    {
+      "resolver": "dns-tcp|114.35.242.247|53",
       "from": "accepted",
       "to": "rejected"
     },
     {
-      "resolver": "dns-tcp|116.193.64.16|53",
+      "resolver": "dns-tcp|115.146.252.198|53",
+      "from": "accepted",
+      "to": "candidate"
+    },
+    {
+      "resolver": "dns-tcp|115.84.79.71|53",
+      "from": "rejected",
+      "to": "accepted"
+    },
+    {
+      "resolver": "dns-tcp|116.12.215.137|53",
       "from": "candidate",
       "to": "rejected"
     },
     {
-      "resolver": "dns-tcp|116.48.144.195|53",
-      "from": "rejected",
-      "to": "accepted"
-    },
-    {
-      "resolver": "dns-tcp|117.53.152.76|53",
-      "from": "rejected",
-      "to": "accepted"
-    },
-    {
-      "resolver": "dns-tcp|118.103.239.9|53",
-      "from": "candidate",
-      "to": "accepted"
-    },
-    {
-      "resolver": "dns-tcp|118.163.151.102|53",
-      "from": "candidate",
-      "to": "accepted"
-    },
-    {
-      "resolver": "dns-tcp|118.173.197.174|53",
+      "resolver": "dns-tcp|117.16.191.7|53",
       "from": "accepted",
       "to": "rejected"
     },
     {
       "resolver": "dns-tcp|118.175.244.113|53",
-      "from": "accepted",
-      "to": "rejected"
+      "from": "rejected",
+      "to": "accepted"
     },
     {
-      "resolver": "dns-tcp|118.3.227.163|53",
+      "resolver": "dns-tcp|118.201.211.82|53",
       "from": "rejected",
       "to": "accepted"
     },
     {
       "resolver": "dns-tcp|118.69.109.45|53",
-      "from": "candidate",
-      "to": "accepted"
+      "from": "accepted",
+      "to": "rejected"
     },
     {
       "resolver": "dns-tcp|118.69.126.44|53",
-      "from": "rejected",
-      "to": "candidate"
+      "from": "candidate",
+      "to": "rejected"
     },
     {
       "resolver": "dns-tcp|118.70.203.68|53",
-      "from": "candidate",
-      "to": "accepted"
+      "from": "accepted",
+      "to": "candidate"
     },
     {
       "resolver": "dns-tcp|119.110.69.146|53",
-      "from": "accepted",
-      "to": "candidate"
-    },
-    {
-      "resolver": "dns-tcp|119.201.108.71|53",
-      "from": "accepted",
-      "to": "rejected"
-    },
-    {
-      "resolver": "dns-tcp|119.59.113.138|53",
-      "from": "accepted",
-      "to": "candidate"
-    },
-    {
-      "resolver": "dns-tcp|119.73.138.17|53",
-      "from": "rejected",
-      "to": "accepted"
-    },
-    {
-      "resolver": "dns-tcp|119.92.50.161|53",
-      "from": "rejected",
-      "to": "accepted"
-    },
-    {
-      "resolver": "dns-tcp|12.221.3.59|53",
       "from": "candidate",
       "to": "accepted"
     },
     {
-      "resolver": "dns-tcp|12.40.39.5|53",
-      "from": "accepted",
-      "to": "candidate"
+      "resolver": "dns-tcp|119.18.150.87|53",
+      "from": "candidate",
+      "to": "rejected"
     },
     {
-      "resolver": "dns-tcp|120.72.106.125|53",
-      "from": "rejected",
-      "to": "candidate"
-    },
-    {
-      "resolver": "dns-tcp|120.72.85.169|53",
-      "from": "accepted",
-      "to": "candidate"
-    },
-    {
-      "resolver": "dns-tcp|122.116.8.109|53",
+      "resolver": "dns-tcp|119.73.138.17|53",
       "from": "accepted",
       "to": "rejected"
     },
     {
-      "resolver": "dns-tcp|122.155.213.7|53",
+      "resolver": "dns-tcp|12.40.39.5|53",
+      "from": "candidate",
+      "to": "accepted"
+    },
+    {
+      "resolver": "dns-tcp|12.71.143.33|53",
       "from": "accepted",
+      "to": "rejected"
+    },
+    {
+      "resolver": "dns-tcp|120.72.106.125|53",
+      "from": "candidate",
+      "to": "accepted"
+    },
+    {
+      "resolver": "dns-tcp|120.72.85.169|53",
+      "from": "candidate",
+      "to": "rejected"
+    },
+    {
+      "resolver": "dns-tcp|121.58.203.1|53",
+      "from": "accepted",
+      "to": "candidate"
+    },
+    {
+      "resolver": "dns-tcp|121.58.203.4|53",
+      "from": "accepted",
+      "to": "rejected"
+    },
+    {
+      "resolver": "dns-tcp|122.116.8.109|53",
+      "from": "rejected",
+      "to": "accepted"
+    },
+    {
+      "resolver": "dns-tcp|122.155.213.6|53",
+      "from": "rejected",
+      "to": "candidate"
+    },
+    {
+      "resolver": "dns-tcp|122.187.48.102|53",
+      "from": "rejected",
+      "to": "candidate"
+    },
+    {
+      "resolver": "dns-tcp|122.201.26.32|53",
+      "from": "candidate",
       "to": "rejected"
     },
     {
       "resolver": "dns-tcp|122.211.89.209|53",
-      "from": "accepted",
-      "to": "candidate"
-    },
-    {
-      "resolver": "dns-tcp|122.252.241.166|53",
-      "from": "candidate",
-      "to": "rejected"
-    },
-    {
-      "resolver": "dns-tcp|122.53.179.133|53",
-      "from": "accepted",
-      "to": "rejected"
-    },
-    {
-      "resolver": "dns-tcp|123.176.98.140|53",
-      "from": "accepted",
-      "to": "rejected"
-    },
-    {
-      "resolver": "dns-tcp|123.200.11.90|53",
-      "from": "rejected",
-      "to": "candidate"
-    },
-    {
-      "resolver": "dns-tcp|123.200.15.58|53",
-      "from": "accepted",
-      "to": "candidate"
-    },
-    {
-      "resolver": "dns-tcp|123.201.247.161|53",
       "from": "candidate",
       "to": "accepted"
     },
     {
-      "resolver": "dns-tcp|123.252.254.26|53",
+      "resolver": "dns-tcp|122.54.62.137|53",
+      "from": "candidate",
+      "to": "rejected"
+    },
+    {
+      "resolver": "dns-tcp|123.176.98.140|53",
+      "from": "rejected",
+      "to": "accepted"
+    },
+    {
+      "resolver": "dns-tcp|123.200.11.90|53",
+      "from": "candidate",
+      "to": "rejected"
+    },
+    {
+      "resolver": "dns-tcp|123.200.15.58|53",
+      "from": "candidate",
+      "to": "rejected"
+    },
+    {
+      "resolver": "dns-tcp|123.241.252.251|53",
       "from": "rejected",
       "to": "candidate"
     },
     {
-      "resolver": "dns-tcp|124.106.123.241|53",
+      "resolver": "dns-tcp|123.252.215.25|53",
+      "from": "rejected",
+      "to": "candidate"
+    },
+    {
+      "resolver": "dns-tcp|123.252.254.26|53",
       "from": "candidate",
       "to": "rejected"
     },
     {
-      "resolver": "dns-tcp|124.106.235.59|53",
-      "from": "candidate",
-      "to": "rejected"
+      "resolver": "dns-tcp|124.105.212.158|53",
+      "from": "rejected",
+      "to": "candidate"
+    },
+    {
+      "resolver": "dns-tcp|124.106.234.45|53",
+      "from": "rejected",
+      "to": "candidate"
     },
     {
       "resolver": "dns-tcp|124.107.126.1|53",
-      "from": "rejected",
+      "from": "candidate",
+      "to": "rejected"
+    },
+    {
+      "resolver": "dns-tcp|125.209.80.106|53",
+      "from": "accepted",
       "to": "candidate"
     },
     {
       "resolver": "dns-tcp|125.227.35.90|53",
-      "from": "candidate",
-      "to": "rejected"
+      "from": "rejected",
+      "to": "candidate"
     },
     {
-      "resolver": "dns-tcp|125.227.89.44|53",
+      "resolver": "dns-tcp|125.234.238.3|53",
       "from": "accepted",
       "to": "rejected"
     },
     {
-      "resolver": "dns-tcp|125.229.59.173|53",
-      "from": "candidate",
-      "to": "rejected"
+      "resolver": "dns-tcp|126.249.167.161|53",
+      "from": "rejected",
+      "to": "accepted"
     },
     {
-      "resolver": "dns-tcp|126.249.167.161|53",
+      "resolver": "dns-tcp|126.249.167.193|53",
+      "from": "rejected",
+      "to": "accepted"
+    },
+    {
+      "resolver": "dns-tcp|126.249.64.222|53",
+      "from": "rejected",
+      "to": "accepted"
+    },
+    {
+      "resolver": "dns-tcp|128.106.52.161|53",
       "from": "accepted",
       "to": "rejected"
     },
     {
       "resolver": "dns-tcp|128.92.222.227|53",
-      "from": "accepted",
-      "to": "rejected"
-    },
-    {
-      "resolver": "dns-tcp|128.92.65.181|53",
-      "from": "accepted",
-      "to": "rejected"
-    },
-    {
-      "resolver": "dns-tcp|129.126.63.122|53",
-      "from": "candidate",
-      "to": "rejected"
-    },
-    {
-      "resolver": "dns-tcp|129.250.35.251|53",
-      "from": "accepted",
-      "to": "candidate"
-    },
-    {
-      "resolver": "dns-tcp|130.51.240.129|53",
-      "from": "accepted",
-      "to": "rejected"
-    },
-    {
-      "resolver": "dns-tcp|130.93.126.105|53",
-      "from": "candidate",
-      "to": "rejected"
-    },
-    {
-      "resolver": "dns-tcp|131.255.12.194|53",
-      "from": "accepted",
-      "to": "rejected"
-    },
-    {
-      "resolver": "dns-tcp|134.19.148.95|53",
       "from": "rejected",
       "to": "accepted"
     },
     {
-      "resolver": "dns-tcp|134.90.140.29|53",
+      "resolver": "dns-tcp|128.92.36.51|53",
+      "from": "rejected",
+      "to": "accepted"
+    },
+    {
+      "resolver": "dns-tcp|129.126.84.102|53",
       "from": "accepted",
       "to": "rejected"
     },
     {
-      "resolver": "dns-tcp|138.219.50.74|53",
+      "resolver": "dns-tcp|129.250.35.251|53",
+      "from": "candidate",
+      "to": "accepted"
+    },
+    {
+      "resolver": "dns-tcp|130.51.240.129|53",
+      "from": "rejected",
+      "to": "accepted"
+    },
+    {
+      "resolver": "dns-tcp|130.93.126.105|53",
+      "from": "rejected",
+      "to": "accepted"
+    },
+    {
+      "resolver": "dns-tcp|134.19.148.95|53",
       "from": "accepted",
-      "to": "candidate"
+      "to": "rejected"
+    },
+    {
+      "resolver": "dns-tcp|138.204.201.54|53",
+      "from": "rejected",
+      "to": "accepted"
     },
     {
       "resolver": "dns-tcp|139.162.33.25|53",
-      "from": "candidate",
-      "to": "rejected"
-    },
-    {
-      "resolver": "dns-tcp|139.64.162.129|53",
-      "from": "candidate",
-      "to": "rejected"
+      "from": "rejected",
+      "to": "candidate"
     },
     {
       "resolver": "dns-tcp|14.160.87.86|53",
+      "from": "candidate",
+      "to": "rejected"
+    },
+    {
+      "resolver": "dns-tcp|14.161.47.108|53",
+      "from": "rejected",
+      "to": "candidate"
+    },
+    {
+      "resolver": "dns-tcp|14.50.118.125|53",
+      "from": "rejected",
+      "to": "accepted"
+    },
+    {
+      "resolver": "dns-tcp|14.56.77.168|53",
       "from": "rejected",
       "to": "candidate"
     },
     {
       "resolver": "dns-tcp|140.227.176.167|53",
-      "from": "rejected",
-      "to": "candidate"
-    },
-    {
-      "resolver": "dns-tcp|141.1.1.1|53",
-      "from": "rejected",
-      "to": "candidate"
-    },
-    {
-      "resolver": "dns-tcp|141.136.112.107|53",
       "from": "candidate",
       "to": "rejected"
-    },
-    {
-      "resolver": "dns-tcp|141.154.0.68|53",
-      "from": "rejected",
-      "to": "accepted"
-    },
-    {
-      "resolver": "dns-tcp|141.95.65.106|53",
-      "from": "rejected",
-      "to": "accepted"
-    },
-    {
-      "resolver": "dns-tcp|142.11.200.36|53",
-      "from": "candidate",
-      "to": "accepted"
-    },
-    {
-      "resolver": "dns-tcp|142.11.217.5|53",
-      "from": "rejected",
-      "to": "accepted"
-    },
-    {
-      "resolver": "dns-tcp|144.129.45.42|53",
-      "from": "accepted",
-      "to": "rejected"
-    },
-    {
-      "resolver": "dns-tcp|144.91.123.182|53",
-      "from": "accepted",
-      "to": "candidate"
-    },
-    {
-      "resolver": "dns-tcp|145.239.196.217|53",
-      "from": "accepted",
-      "to": "rejected"
-    },
-    {
-      "resolver": "dns-tcp|146.0.17.81|53",
-      "from": "candidate",
-      "to": "rejected"
-    },
-    {
-      "resolver": "dns-tcp|146.0.23.67|53",
-      "from": "candidate",
-      "to": "rejected"
-    },
-    {
-      "resolver": "dns-tcp|146.155.226.12|53",
-      "from": "rejected",
-      "to": "accepted"
-    },
-    {
-      "resolver": "dns-tcp|147.50.47.189|53",
-      "from": "rejected",
-      "to": "candidate"
-    },
-    {
-      "resolver": "dns-tcp|148.102.51.97|53",
-      "from": "candidate",
-      "to": "rejected"
-    },
-    {
-      "resolver": "dns-tcp|148.243.126.229|53",
-      "from": "candidate",
-      "to": "rejected"
-    },
-    {
-      "resolver": "dns-tcp|148.244.211.136|53",
-      "from": "rejected",
-      "to": "accepted"
     }
   ],
-  "status_changes_total": 1741,
+  "status_changes_total": 1786,
   "truncated": true
 }
