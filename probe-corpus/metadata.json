@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "corpus_version": "dev",
-  "generated_at": "2026-11-19T10:21:43Z",
+  "generated_at": "2026-11-20T10:02:22Z",
   "generator_version": "0.1.1",
   "sources_used": [
     "https://www.iana.org/domains/root/servers",
