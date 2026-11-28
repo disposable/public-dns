@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "corpus_version": "dev",
-  "generated_at": "2026-11-27T10:52:31Z",
+  "generated_at": "2026-11-28T10:27:38Z",
   "probes": [
     {
       "id": "positive-exact-a-root-servers-net-a",
